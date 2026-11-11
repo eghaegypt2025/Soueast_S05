@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة وصيانة Soueast S05 الذكي</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Cairo Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  
+  <!-- Web App Manifest & Mobile Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#f97316">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            mono: ['Orbitron', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              500: '#f97316', // Soueast Orange
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.03);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(249, 115, 22, 0.4);
+      border-radius: 4px;
+    }
+    .badge-r {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+    .badge-i {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+    }
+    .dark .badge-r {
+      background-color: rgba(185, 28, 28, 0.25);
+      color: #fca5a5;
+      border-color: #ef4444;
+    }
+    .dark .badge-i {
+      background-color: rgba(3, 105, 161, 0.25);
+      color: #7dd3fc;
+      border-color: #0284c7;
+    }
+    .orange-glow {
+      text-shadow: 0 0 16px rgba(249, 115, 22, 0.55);
+    }
+    @media print {
+      .no-print { display: none !important; }
+      #sidebar { display: none !important; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-[#0d1117] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col md:flex-row antialiased">
+
+  <!-- Mobile Top Header -->
+  <header class="md:hidden no-print sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <button onclick="toggleSidebar()" class="p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+      <div class="flex items-center gap-1.5">
+        <span class="font-extrabold text-xs tracking-wider text-slate-400">SOUEAST</span>
+        <span class="font-black text-base text-orange-500 font-mono">S05</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs bg-orange-500/10 text-orange-500 font-bold px-2.5 py-1 rounded-full border border-orange-500/30">
+        <span id="mobileNavKm">0</span> كم
+      </span>
+      <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300">
+        <i class="fa-solid fa-moon dark:hidden"></i>
+        <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar Overlay for mobile -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-xs transition-opacity"></div>
+
+  <!-- Sidebar Navigation -->
+  <aside id="sidebar" class="fixed md:sticky top-0 right-0 z-50 h-screen w-64 bg-white dark:bg-[#111622] border-l border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-300 translate-x-full md:translate-x-0 shrink-0">
+    <div>
+      <!-- Brand Logo / Badge Section -->
+      <div class="p-4 border-b border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 font-black">
+            <i class="fa-solid fa-car-side text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xs font-bold tracking-widest text-slate-400">SOUEAST</span>
+              <span class="text-xl font-black text-orange-500 orange-glow font-mono tracking-tight">S05</span>
+            </div>
+            <p class="text-[10px] text-orange-600/80 dark:text-orange-400 font-semibold uppercase tracking-wider">نظام الصيانة الذكي</p>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-slate-200 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Quick Odometer Live Widget in Sidebar -->
+      <div class="mx-3 my-3 p-3 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/20 dark:to-slate-900 border border-orange-200 dark:border-orange-500/20">
+        <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-gauge-high text-orange-500"></i> العداد الفعلي</span>
+          <span class="text-[10px] text-orange-600 dark:text-orange-400">كم</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <input type="number" id="sidebarOdometerInput" value="0" min="0" 
+            class="w-full bg-white dark:bg-slate-800 text-orange-600 dark:text-orange-400 font-black text-lg px-2.5 py-1 rounded-xl border border-orange-300 dark:border-orange-500/30 font-mono focus:outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">تحديث العداد يحدّث جداول الصيانة فورياً</p>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="px-2 space-y-1">
+        <button onclick="switchTab('dashboard')" id="sideBtn-dashboard" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-white bg-orange-500 shadow-md shadow-orange-500/30">
+          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+          <span>لوحة التحكم والمؤشرات</span>
+        </button>
+
+        <button onclick="switchTab('ai-scanner')" id="sideBtn-ai-scanner" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-wand-magic-sparkles w-4 text-center text-orange-500"></i>
+          <span>فحص الطبلون بالذكاء الاصطناعي</span>
+          <span class="text-[9px] bg-orange-100 dark:bg-orange-950 text-orange-600 dark:text-orange-400 font-extrabold px-1.5 py-0.5 rounded-full mr-auto">AI</span>
+        </button>
+
+        <button onclick="switchTab('schedule')" id="sideBtn-schedule" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-table-list w-4 text-center"></i>
+          <span>جدول الصيانة الأصلي</span>
+        </button>
+
+        <button onclick="switchTab('agency-history')" id="sideBtn-agency-history" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-certificate w-4 text-center text-amber-500"></i>
+          <span>سجل صيانات التوكيل</span>
+          <span id="agencyBadgeCount" class="text-[9px] bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 font-extrabold px-1.5 py-0.5 rounded-full mr-auto">0</span>
+        </button>
+
+        <button onclick="switchTab('fuel')" id="sideBtn-fuel" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-gas-pump w-4 text-center"></i>
+          <span>تعبئة الوقود واستهلاك البنزين</span>
+        </button>
+
+        <button onclick="switchTab('notes')" id="sideBtn-notes" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-clipboard-list w-4 text-center"></i>
+          <span>الملاحظات والإصلاحات</span>
+        </button>
+
+        <button onclick="switchTab('checklist')" id="sideBtn-checklist" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-solid fa-circle-check w-4 text-center"></i>
+          <span>الفحص السريع للسيارة</span>
+        </button>
+
+        <button onclick="switchTab('backup-github')" id="sideBtn-backup-github" class="side-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60">
+          <i class="fa-brands fa-github w-4 text-center"></i>
+          <span>النسخ الاحتياطي و GitHub</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer Actions -->
+    <div class="p-3 border-t border-slate-200 dark:border-slate-800/80 space-y-2">
+      <div class="flex items-center justify-between px-2 text-xs">
+        <span class="text-slate-400 font-medium">المظهر الليلي</span>
+        <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-orange-500">
+          <i class="fa-solid fa-moon dark:hidden"></i>
+          <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+        </button>
+      </div>
+
+      <button onclick="window.print()" class="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800">
+        <i class="fa-solid fa-print"></i> طباعة تقرير الصيانة
+      </button>
+
+      <button onclick="confirmResetAllData()" class="w-full flex items-center justify-center gap-2 py-1.5 text-[11px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition">
+        <i class="fa-solid fa-arrow-rotate-left"></i> تصفير كافة البيانات
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 min-w-0 max-w-full p-3 sm:p-5 lg:p-6 overflow-y-auto">
+
+    <!-- Notification Toast -->
+    <div id="toastMessage" class="hidden fixed bottom-5 left-5 z-50 bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 text-xs font-bold border border-slate-700">
+      <i class="fa-solid fa-circle-check text-orange-400 text-sm"></i>
+      <span id="toastText">تم الإجراء بنجاح</span>
+    </div>
+
+    <!-- TAB 1: COMPACT DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content space-y-4">
+      
+      <!-- Top Prominent Car Model Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-[#1e130c] text-white rounded-2xl p-4 sm:p-5 border border-orange-500/30 shadow-md relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-56 h-56 bg-orange-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs uppercase tracking-widest font-extrabold text-slate-400">SOUEAST MOTORS</span>
+              <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/40">CUV 1.5T / 1.6</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black mt-1 flex items-baseline gap-2">
+              <span class="text-white">سيارة</span>
+              <span class="text-orange-500 orange-glow font-mono text-3xl sm:text-4xl">SOUEAST S05</span>
+            </h1>
+            <p class="text-xs text-slate-300 mt-1 max-w-xl">
+              نظام المتابعة الشامل لجدول الصيانة الدوري، تفويلات البنزين، وفحص شاشة الطبلون الذكي.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3 bg-black/40 p-2.5 rounded-2xl border border-white/10 shrink-0">
+            <div class="text-left">
+              <span class="text-[10px] text-slate-400 block font-medium">العداد الحالي</span>
+              <span id="dashCurrentKmHero" class="text-xl sm:text-2xl font-black text-orange-400 font-mono">0</span>
+              <span class="text-xs text-slate-400 mr-0.5">كم</span>
+            </div>
+            <button onclick="switchTab('ai-scanner')" class="px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm shadow-orange-500/30">
+              <i class="fa-solid fa-camera"></i>
+              <span>تصوير الشاشة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-white dark:bg-slate-800/90 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span>آخر صيانة بالتوكيل</span>
+            <i class="fa-solid fa-certificate text-amber-500"></i>
+          </div>
+          <div id="statLastAgencyServiceDisplay" class="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">لم تُسجل</div>
+          <p id="statLastAgencyServiceSub" class="text-[11px] text-slate-400 mt-0.5">في انتظار أول صيانة</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800/90 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span>الصيانة القادمة</span>
+            <i class="fa-solid fa-wrench text-orange-500"></i>
+          </div>
+          <div id="statNextServiceKm" class="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">1,000 كم</div>
+          <p id="statRemainingKm" class="text-[11px] text-orange-600 dark:text-orange-400 font-bold mt-0.5">متبقي 1,000 كم</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800/90 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span>آخر تعبئة بنزين</span>
+            <i class="fa-solid fa-gas-pump text-amber-500"></i>
+          </div>
+          <div id="statLastRefuelDisplay" class="text-base sm:text-lg font-black text-slate-900 dark:text-white">لم تُسجل</div>
+          <p id="statLastRefuelSub" class="text-[11px] text-slate-400 mt-0.5">0 لتر</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800/90 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span>معدل الاستهلاك</span>
+            <i class="fa-solid fa-bolt text-emerald-500"></i>
+          </div>
+          <div id="statConsumptionRate" class="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">-- كم/لتر</div>
+          <p class="text-[11px] text-slate-400 mt-0.5">محسوب آلياً</p>
+        </div>
+      </div>
+
+      <!-- Service Progress Bar & Replaces -->
+      <div class="bg-white dark:bg-slate-800/90 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse"></span>
+            <h3 class="text-sm font-black text-slate-900 dark:text-white">
+              متابعة صيانة <span id="dashTargetKmTitle" class="text-orange-500 font-mono">1,000 كم</span> (شهر 8)
+            </h3>
+          </div>
+          <span id="dashIntervalMonthLimit" class="text-[11px] font-semibold text-slate-400">الحد الأقصى الزمني: 8 شهر</span>
+        </div>
+
+        <!-- Progress -->
+        <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden my-2">
+          <div id="dashProgressBar" class="bg-gradient-to-r from-orange-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+
+        <div class="flex justify-between text-[10px] text-slate-400 font-bold mb-3">
+          <span id="dashPrevBracket">0 كم</span>
+          <span id="dashPercentProgress">0% تم قطعها</span>
+          <span id="dashNextBracket">1,000 كم</span>
+        </div>
+
+        <!-- What to replace right now -->
+        <div class="p-3 rounded-xl bg-orange-50/60 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-extrabold text-orange-900 dark:text-orange-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-arrows-rotate text-orange-500"></i> القطع الواجب تغييرها إجبارياً في هذه الصيانة (R):
+            </span>
+            <button onclick="openCompleteServiceModal()" class="px-2.5 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-[11px] font-black transition flex items-center gap-1 shadow-sm">
+              <i class="fa-solid fa-check-double"></i> تم إتمامها في التوكيل
+            </button>
+          </div>
+          <div id="dashMustReplaceBadges" class="flex flex-wrap gap-1.5">
+            <!-- Badges -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Action items list preview -->
+      <div class="bg-white dark:bg-slate-800/90 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-700/60">
+          <h3 class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-orange-500"></i>
+            إجمالي بنود الفحص والتغيير للصيانة المستهدفة
+          </h3>
+          <span class="text-[11px] text-slate-400 font-semibold">15 عنصراً رسمياً</span>
+        </div>
+
+        <div id="dashTasksCompactGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: AI SMART DASHBOARD & ODOMETER SCANNER -->
+    <section id="tab-ai-scanner" class="tab-content hidden space-y-4">
+      
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-orange-500/40 shadow-sm relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-md bg-orange-500 text-white text-[10px] font-black tracking-wide">GEMINI AI VISION</span>
+              <span class="text-xs text-orange-400 font-bold">فحص ذكي لطبلون Soueast S05</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black mt-1">التعرف التلقائي على العداد وقراءة لمبات التحذير</h2>
+            <p class="text-xs text-slate-300 mt-1 max-w-xl">
+              التقط صورة لشاشة العدادات / الطبلون في سيارتك S05، وسيقوم الذكاء الاصطناعي بقراءة الكيلومترات وتحديث التطبيق واكتشاف أي لمبة تحذيرية مضاءة.
+            </p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 text-2xl shrink-0">
+            <i class="fa-solid fa-microchip"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        
+        <!-- Upload Card -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+              <i class="fa-solid fa-camera text-orange-500"></i> التقاط أو رفع صورة الطبلون
+            </h3>
+
+            <!-- Drop / Picker Zone -->
+            <label for="dashboardImageInput" class="cursor-pointer border-2 border-dashed border-orange-300 dark:border-orange-500/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-orange-50/50 dark:hover:bg-orange-950/10 transition group">
+              <div class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-950/60 flex items-center justify-center text-orange-500 text-xl mb-2 group-hover:scale-110 transition">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <span class="text-xs font-bold text-slate-700 dark:text-slate-300">انقر هنا لالتقاط صورة أو اختيارها من المعرض</span>
+              <span class="text-[10px] text-slate-400 mt-1">يدعم JPG, PNG, WEBP</span>
+              <input type="file" id="dashboardImageInput" accept="image/*" class="hidden" onchange="handleImageSelected(event)">
+            </label>
+
+            <!-- Image Preview -->
+            <div id="imagePreviewContainer" class="hidden mt-3 relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-56 bg-black flex items-center justify-center">
+              <img id="imagePreview" src="" alt="طبلون السيارة" class="object-contain max-h-56 w-full">
+              <button onclick="clearSelectedImage()" class="absolute top-2 left-2 w-7 h-7 bg-black/70 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition text-xs">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">يستخدم نموذج Gemini 3 Flash Vision</span>
+            <button id="analyzeImageBtn" onclick="analyzeDashboardImage()" disabled class="px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-extrabold flex items-center gap-2 shadow-sm transition">
+              <i class="fa-solid fa-bolt"></i> بدء التحليل الذكي
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Output & Analysis Card -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-robot text-orange-500"></i> نتيجة قراءة الذكاء الاصطناعي
+              </h3>
+              <span id="aiStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500">
+                في انتظار رفع الصورة
+              </span>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="aiLoadingIndicator" class="hidden py-12 flex flex-col items-center justify-center text-center">
+              <div class="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mb-3"></div>
+              <span class="text-xs font-bold text-slate-600 dark:text-slate-300">جارٍ تحليل بيانات شاشة Soueast S05...</span>
+              <span class="text-[10px] text-slate-400 mt-1">استخراج قراءة العداد ومؤشرات الطبلون</span>
+            </div>
+
+            <!-- Result Box -->
+            <div id="aiResultContent" class="space-y-3">
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-center text-slate-400 text-xs">
+                ارفع صورة لشاشة عدادات سيارتك S05 واضغط "بدء التحليل الذكي" لاستخراج العداد وقراءة لمبات الفرامل والمحرك والحرارة.
+              </div>
+            </div>
+          </div>
+
+          <div id="aiApplyBtnContainer" class="hidden mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400">هل القراءة مطابقة؟</span>
+            <button id="applyAiMileageBtn" onclick="applyAiDetectedMileage()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-check"></i> اعتماد وتحديث العداد بالتطبيق
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AI Driving & Maintenance Diagnostics Assistant -->
+      <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100 dark:border-slate-700">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-brain text-orange-500"></i>
+            <h3 class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100">
+              المساعد الذكي لتقييم صحة Soueast S05
+            </h3>
+          </div>
+          <button onclick="requestAiMaintenanceAnalysis()" class="px-3 py-1.5 rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 text-xs font-bold hover:bg-orange-200 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-arrows-rotate"></i> تحليل سجلاتي واستخراج التوصيات
+          </button>
+        </div>
+        
+        <div id="aiGeneralDiagnosisBox" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
+          اضغط على الزر أعلاه ليقوم الذكاء الاصطناعي بدراسة قراءة عدادك الحالي، معدل استهلاك البنزين، والملاحظات المسجلة لتقديم تقرير فني مخصص لسيارتك.
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FULL OFFICIAL SCHEDULE TABLE (IMAGE COMPLIANCE) -->
+    <section id="tab-schedule" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+        
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white">جدول الصيانة الدوري الرسمي - سيارات السواست</h2>
+              <span class="text-[10px] px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-600 dark:text-orange-400 font-extrabold border border-orange-500/30">كتالوج Soueast المعتمد</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">
+              مأخوذ حرفياً بنسبة 100% من وثيقة الصيانة المرفقة للسيارة
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+          <button onclick="openCompleteServiceModal()" class="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-stamp"></i> تسجيل صيانة تمت بالتوكيل
+          </button>
+          <!-- Highlight current column selector -->
+          <select id="scheduleIntervalFilter" onchange="highlightScheduleColumn(this.value)" class="bg-white dark:bg-slate-800 text-xs font-bold py-1.5 px-2.5 rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none">
+            <option value="all">عرض كامل الجدول</option>
+            <option value="1000">1,000 كم (شهر 8)</option>
+            <option value="10000">10,000 كم (شهر 8)</option>
+            <option value="20000">20,000 كم (شهر 16)</option>
+            <option value="30000">30,000 كم (شهر 24)</option>
+            <option value="40000">40,000 كم (شهر 32)</option>
+            <option value="50000">50,000 كم (شهر 40)</option>
+            <option value="60000">60,000 كم (شهر 48)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Schedule Table Wrapper -->
+      <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700/80">
+        <table class="w-full text-right text-xs">
+          <thead class="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-black">
+            <tr class="border-b border-slate-200 dark:border-slate-800">
+              <th class="p-3">عناصر الصيانة</th>
+              <th class="p-3 text-center col-1000">1,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 8</span></th>
+              <th class="p-3 text-center col-10000">10,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 8</span></th>
+              <th class="p-3 text-center col-20000">20,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 16</span></th>
+              <th class="p-3 text-center col-30000">30,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 24</span></th>
+              <th class="p-3 text-center col-40000">40,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 32</span></th>
+              <th class="p-3 text-center col-50000">50,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 40</span></th>
+              <th class="p-3 text-center col-60000">60,000 كم<br><span class="text-[10px] text-slate-400 font-normal">شهر 48</span></th>
+            </tr>
+          </thead>
+          <tbody id="maintenanceTableBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 text-xs flex items-start gap-2">
+        <i class="fa-solid fa-circle-exclamation mt-0.5 text-amber-500"></i>
+        <span><strong>ملحوظة الكتالوج الرسمية:</strong> يتم تغيير مصفاة الفتيس الأوتوماتيك عند تغيير زيت الفتيس، بالنسبة للسيارات الـ 1600 فقط. <br><strong>دليل الرموز:</strong> [R] = تغيير إجباري | [I] = الكشف، التنظيف، الضبط.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB: AGENCY SERVICE HISTORY -->
+  <section id="tab-agency-history" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-700 gap-2">
+          <div>
+            <h3 class="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-certificate text-amber-500"></i>
+              سجل صيانات التوكيل المعتمدة لسيارة Soueast S05
+            </h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">توثيق رسمي لجميع الصيانات الدورية المنفذة بمراكز خدمة ساويست المعتمدة</p>
+          </div>
+          <button onclick="openCompleteServiceModal()" class="px-3.5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs transition flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-plus"></i> إضافة صيانة تمت
+          </button>
+        </div>
+
+        <!-- Last Completed Service Highlight Banner -->
+        <div id="lastAgencyServiceCard" class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent border border-amber-500/30 mb-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500 text-slate-900">آخر صيانة مسجلة بالتوكيل</span>
+              <h4 id="highlightAgencyTitle" class="text-base font-black text-slate-900 dark:text-white mt-1">لا توجد صيانات مسجلة بعد</h4>
+              <p id="highlightAgencyDetails" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">عند زيارة التوكيل وإتمام أي صيانة دورية، قم بتسجيلها هنا لحفظ الضمان وتاريخ السيارة.</p>
+            </div>
+            <div id="highlightAgencyStats" class="text-right shrink-0">
+              <!-- Stats populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- History Table / Cards -->
+        <div class="space-y-3" id="agencyHistoryList">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: GITHUB BACKUP & MOBILE INSTALL -->
+    <section id="tab-backup-github" class="tab-content hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        
+        <!-- Mobile Install & Hosting Guide -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950/60 text-orange-500 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+              </div>
+              <h3 class="text-sm font-black text-slate-900 dark:text-white">طريقة النشر على GitHub والفتح من الهاتف كأنه تطبيق أصلي</h3>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
+              يمكنك استضافة هذا التطبيق مجاناً وبسهولة عبر **GitHub Pages** لفتحه من هاتفك دائماً بضغطة زر وتثبيته على الشاشة الرئيسية:
+            </p>
+
+            <ol class="space-y-2 text-xs text-slate-700 dark:text-slate-300 pr-4 list-decimal font-medium">
+              <li>قم بإنشاء مستودع جديد (New Repository) في حسابك على <strong>GitHub</strong> باسم مثلاً: <code class="bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded text-orange-600 font-mono">soueast-s05</code>.</li>
+              <li>ارفع كود هذا الملف باسم <code class="bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded text-orange-600 font-mono">index.html</code>.</li>
+              <li>من إعدادات المستودع (Settings) ⬅ اذهب إلى (Pages) ⬅ اختر الفرع <code class="bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded font-mono">main</code> ثم اضغط <strong>Save</strong>.</li>
+              <li>ستحصل فوراً على رابط دائم ومجاني لتطبيقك بصيغة: <br><span class="text-orange-500 font-mono text-[11px] dir-ltr inline-block mt-1">https://username.github.io/soueast-s05</span></li>
+              <li>افتح الرابط من متصفح الهاتف (Safari أو Chrome) واختر: <strong>"إضافة إلى الشاشة الرئيسية" (Add to Home Screen)</strong> ليفتح كأنه تطبيق بدون شريط عنوان المتصفح!</li>
+            </ol>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-medium">جاهز بنسبة 100% للهاتف</span>
+            <button onclick="copyCurrentUrl()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 transition flex items-center gap-1.5">
+              <i class="fa-regular fa-copy"></i> نسخ رابط التطبيق
+            </button>
+          </div>
+        </div>
+
+        <!-- Data Backup & GitHub JSON sync -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold">
+                <i class="fa-brands fa-github text-lg"></i>
+              </div>
+              <h3 class="text-sm font-black text-slate-900 dark:text-white">حفظ ونسخ بيانات السيارة لـ GitHub (Backup & Restore)</h3>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+              يمكنك تصدير كافة بياناتك (صيانات التوكيل، البنزين، الملاحظات، والعداد) بملف <code class="text-orange-500 font-mono">soueast_s05_data.json</code> لرفعه على GitHub لحفظ تاريخ السيارة، أو استيراده في أي وقت على أي جهاز آخر.
+            </p>
+
+            <div class="space-y-3">
+              <button onclick="exportDataJson()" class="w-full py-2.5 px-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs shadow-sm transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> تصدير وتحميل ملف البيانات (soueast_s05_data.json)
+              </button>
+
+              <label class="cursor-pointer w-full py-2.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-upload"></i> استيراد واسترجاع بيانات من ملف JSON
+                <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importDataJson(event)">
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/80 text-[11px] text-slate-400">
+            <i class="fa-solid fa-lock text-orange-500 ml-1"></i> يتم حفظ بياناتك أيضاً تلقائياً في ذاكرة متصفحك بشكل فوري.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COMPLETE SERVICE MODAL DIALOG -->
+    <div id="completeServiceModal" class="fixed inset-0 z-50 bg-black/60 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md p-5 border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-700">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-certificate text-amber-500 text-lg"></i>
+            <h3 class="font-black text-sm text-slate-900 dark:text-white">توثيق صيانة دورية تمت بالتوكيل</h3>
+          </div>
+          <button onclick="closeCompleteServiceModal()" class="text-slate-400 hover:text-slate-200 p-1">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="completeServiceForm" onsubmit="handleCompleteServiceSubmit(event)" class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">صيانة الكيلومتر المستهدفة</label>
+            <select id="modalServiceKmTarget" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+              <option value="1000">صيانة الـ 1,000 كم (شهر 8)</option>
+              <option value="10000">صيانة الـ 10,000 كم (شهر 8)</option>
+              <option value="20000">صيانة الـ 20,000 كم (شهر 16)</option>
+              <option value="30000">صيانة الـ 30,000 كم (شهر 24)</option>
+              <option value="40000">صيانة الـ 40,000 كم (شهر 32)</option>
+              <option value="50000">صيانة الـ 50,000 كم (شهر 40)</option>
+              <option value="60000">صيانة الـ 60,000 كم (شهر 48)</option>
+              <option value="custom">صيانة دورية أخرى</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">تاريخ إتمام الصيانة</label>
+              <input type="date" id="modalServiceDate" required 
+                class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">العداد الفعلي وقتها (كم)</label>
+              <input type="number" id="modalServiceKmActual" required min="0" placeholder="مثال: 1050" 
+                class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold font-mono focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">التكلفة الإجمالية (ج.م)</label>
+              <input type="number" id="modalServiceCost" placeholder="مثال: 2400" 
+                class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">فرع التوكيل / المركز</label>
+              <input type="text" id="modalServiceCenter" placeholder="مثال: توكيل ساويست العبور" 
+                class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">القطع المستبدلة أو ملاحظات الفني</label>
+            <textarea id="modalServiceNotes" rows="2" placeholder="تم تغيير زيت ميتسوبيشي التخليقي وفلتر الزيت وفحص العفشة..." 
+              class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="flex items-center gap-2 pt-2">
+            <button type="button" onclick="closeCompleteServiceModal()" class="flex-1 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+              إلغاء
+            </button>
+            <button type="submit" class="flex-1 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-black transition flex items-center justify-center gap-1.5 shadow-md shadow-orange-500/30">
+              <i class="fa-solid fa-stamp"></i> توثيق الصيانة
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 4: FUEL LOG & REFUELING TRACKER -->
+    <section id="tab-fuel" class="tab-content hidden space-y-4">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Add Refuel Form -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs">
+          <h3 class="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-gas-pump text-orange-500"></i>
+            تسجيل تفويلة بنزين جديدة
+          </h3>
+
+          <form id="refuelForm" onsubmit="handleRefuelSubmit(event)" class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">قراءة العداد (كم)</label>
+              <input type="number" id="fuelOdometer" required min="0" placeholder="مثال: 550" 
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none font-mono">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">الكمية (لتر)</label>
+                <input type="number" step="0.1" id="fuelLiters" required placeholder="مثال: 40" 
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">التكلفة الإجمالية (ج.م)</label>
+                <input type="number" step="1" id="fuelCost" placeholder="مثال: 600" 
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">نوع البنزين</label>
+                <select id="fuelOctane" class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                  <option value="92">بنزين 92 (الموصى به)</option>
+                  <option value="95">بنزين 95</option>
+                  <option value="80">بنزين 80</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">التاريخ</label>
+                <input type="date" id="fuelDate" required 
+                  class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">اسم المحطة أو ملاحظة</label>
+              <input type="text" id="fuelStation" placeholder="مثال: وطنية، شل، موبيل..." 
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs shadow-sm shadow-orange-500/30 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-plus"></i> حفظ التفويلة
+            </button>
+          </form>
+        </div>
+
+        <!-- Fuel Statistics & Logs -->
+        <div class="lg:col-span-2 space-y-3">
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-white dark:bg-slate-800/90 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-400 font-bold block mb-1">إجمالي الوقود</span>
+              <span id="statTotalLiters" class="text-base font-black text-slate-800 dark:text-white">0 لتر</span>
+            </div>
+            <div class="bg-white dark:bg-slate-800/90 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-400 font-bold block mb-1">إجمالي الصرف</span>
+              <span id="statTotalFuelCost" class="text-base font-black text-emerald-600 dark:text-emerald-400">0 ج.م</span>
+            </div>
+            <div class="bg-white dark:bg-slate-800/90 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-400 font-bold block mb-1">معدل الاستهلاك</span>
+              <span id="statFuelEfficiency" class="text-base font-black text-orange-500 font-mono">--</span>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-black text-xs sm:text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-slate-400"></i>
+                سجل التفويلات
+              </h4>
+              <span id="fuelRecordsCount" class="text-[10px] text-slate-400 font-bold">0 تفويلات</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/80">
+              <table class="w-full text-right text-xs">
+                <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-bold">
+                  <tr>
+                    <th class="p-2.5">التاريخ</th>
+                    <th class="p-2.5">العداد</th>
+                    <th class="p-2.5">المسافة</th>
+                    <th class="p-2.5">الكمية</th>
+                    <th class="p-2.5">التكلفة</th>
+                    <th class="p-2.5">النوع والمحطة</th>
+                    <th class="p-2.5 text-center">حذف</th>
+                  </tr>
+                </thead>
+                <tbody id="fuelTableBody" class="divide-y divide-slate-100 dark:divide-slate-700/60 font-medium">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: NOTES & REPAIRS -->
+    <section id="tab-notes" class="tab-content hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Add Note -->
+        <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs">
+          <h3 class="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-pen-to-square text-orange-500"></i>
+            تدوين ملاحظة أو عطل
+          </h3>
+
+          <form id="noteForm" onsubmit="handleNoteSubmit(event)" class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">نوع الملاحظة</label>
+              <select id="noteCategory" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                <option value="صيانة دورية">صيانة دورية بالتوكيل</option>
+                <option value="صوت غير طبيعي">صوت غير طبيعي أو اهتزاز</option>
+                <option value="تغيير قطع غيار">تغيير قطع غيار (تيل، فلاتر، لمض)</option>
+                <option value="فحص كاوتش وبطارية">فحص كاوتش وبطارية</option>
+                <option value="ملاحظة عامة">ملاحظة عامة</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">عنوان الملاحظة</label>
+              <input type="text" id="noteTitle" required placeholder="مثال: فحص تيل الفرامل الأمامي" 
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">العداد (كم)</label>
+                <input type="number" id="noteKm" placeholder="اختياري" 
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none font-mono">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">التكلفة (ج.م)</label>
+                <input type="number" id="noteCost" placeholder="0" 
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">التفاصيل والوصف</label>
+              <textarea id="noteDetails" rows="3" placeholder="سجل تفاصيل الورشة أو الأعراض أو القطع..." 
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-orange-500 dark:hover:bg-orange-600 text-white font-black text-xs transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-floppy-disk"></i> حفظ الملاحظة
+            </button>
+          </form>
+        </div>
+
+        <!-- Notes List -->
+        <div class="lg:col-span-2 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-check text-orange-500"></i> سجل الملاحظات
+            </h3>
+            <span id="notesCount" class="text-[10px] bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full font-bold">
+              0 ملاحظات
+            </span>
+          </div>
+
+          <div id="notesContainer" class="space-y-2">
+            <!-- Dynamic notes -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 6: QUICK CHECKLIST -->
+    <section id="tab-checklist" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-700 gap-2">
+          <div>
+            <h3 class="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-emerald-500"></i>
+              قائمة الفحص الدوري السريع لسيارة Soueast S05
+            </h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">افحص هذه النقاط قبل السفر أو شهرياً للحفاظ على عمر المحرك والعفشة</p>
+          </div>
+          <button onclick="resetChecklist()" class="text-xs px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 font-bold transition">
+            إعادة تعيين
+          </button>
+        </div>
+
+        <div id="checklistItemsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Populated via JS -->
+        </div>
+
+        <div class="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xs font-bold text-slate-500">اكتمال الفحص:</span>
+            <span id="checklistPercentage" class="text-xs font-black text-orange-500">0%</span>
+          </div>
+          <button onclick="saveChecklistProgress()" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">
+            اعتماد الفحص
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Application Logic & Data Scripts -->
+  <script>
+    /* ========================================================
+       1. DATA STRUCTURES (EXACTLY FROM UPLOADED IMAGE)
+       ======================================================== */
+    const MAINTENANCE_SCHEDULE = [
+      { id: 'engine_oil', name: 'زيت المحرك وفلتر الزيت', category: 'المحرك', actions: ['R', 'R', 'R', 'R', 'R', 'R', 'R'], critical: true },
+      { id: 'spark_plugs', name: 'شمعة الإشعال (البوجيهات)', category: 'المحرك', actions: ['I', 'I', 'I', 'R', 'I', 'I', 'R'], critical: true },
+      { id: 'air_filter', name: 'فلتر الهواء', category: 'الفلاتر', actions: ['I', 'I', 'R', 'I', 'R', 'I', 'R'], critical: true },
+      { id: 'ac_filter', name: 'فلتر التكييف', category: 'الفلاتر', actions: ['I', 'I', 'R', 'I', 'R', 'I', 'R'], critical: false },
+      { id: 'brake_fluid', name: 'سائل الفرامل (زيت الباكم)', category: 'الفرامل والتحكم', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'R'], critical: true },
+      { id: 'gearbox_oil', name: 'زيت ناقل الحركة (زيت الفتيس)', category: 'ناقل الحركة', actions: ['I', 'I', 'I', 'I', 'I', 'R', 'I'], critical: true, note: 'هام جداً للفتيس الـ CVT / AT' },
+      { id: 'gearbox_oil_filter', name: 'فلتر زيت ناقل الحركة (مصفاة الفتيس)', category: 'ناقل الحركة', actions: ['I', 'I', 'I', 'I', 'I', 'R', 'I'], critical: true, note: 'تغيير مصفاة الفتيس الأوتوماتيك لسيارات 1600cc' },
+      { id: 'serpentine_belt', name: 'سير المجموعة (السيور الخارجية)', category: 'المحرك وملحقاته', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'R'], critical: true },
+      { id: 'front_wipers', name: 'شفرات مساحات الزجاج الأمامي', category: 'الرؤية والسلامة', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: false },
+      { id: 'rear_wipers', name: 'شفرات مساحات الزجاج الخلفي', category: 'الرؤية والسلامة', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: false },
+      { id: 'coolant', name: 'سائل التبريد (مياه الردياتير)', category: 'نظام التبريد', actions: ['I', 'I', 'I', 'I', 'R', 'I', 'I'], critical: true },
+      { id: 'washer_fluid', name: 'سائل المساحات', category: 'الرؤية والسلامة', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: false },
+      { id: 'steering_links', name: 'وصلات التوجيه (عفشة وبارات)', category: 'العفشة والتوجيه', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: true },
+      { id: 'shock_absorbers', name: 'ممتص الصدمات (المساعدين)', category: 'العفشة والتوجيه', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: true },
+      { id: 'brake_pads', name: 'لوحة الفرامل (تيل الفرامل والدبابيس)', category: 'الفرامل والتحكم', actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'], critical: true }
+    ];
+
+    const MILESTONE_INTERVALS = [
+      { km: 1000, months: 8, label: '1,000 كم' },
+      { km: 10000, months: 8, label: '10,000 كم' },
+      { km: 20000, months: 16, label: '20,000 كم' },
+      { km: 30000, months: 24, label: '30,000 كم' },
+      { km: 40000, months: 32, label: '40,000 كم' },
+      { km: 50000, months: 40, label: '50,000 كم' },
+      { km: 60000, months: 48, label: '60,000 كم' }
+    ];
+
+    const CHECKLIST_ITEMS = [
+      { id: 'chk_oil', label: 'مستوى ولون زيت المحرك على مقاس الزيت', tip: 'تأكد من وقوف السيارة على أرض مستوية' },
+      { id: 'chk_coolant', label: 'مستوى سائل التبريد في القربة (Coolant)', tip: 'بين علامتي MIN و MAX' },
+      { id: 'chk_brake', label: 'مستوى زيت الفرامل في الخزان', tip: 'يجب ألا ينقص عن الحد الأقصى' },
+      { id: 'chk_tires', label: 'ضغط هواء الإطارات الأربعة والاستبن', tip: 'المعدل الموصى به 32-34 PSI' },
+      { id: 'chk_lights', label: 'عمل جميع الأنوار والإشارات والفرامل', tip: 'فحص دوري ضروري للأمان' },
+      { id: 'chk_wipers', label: 'مياه المساحات وسلامة الكاوتش', tip: 'تأكد من نظافة زجاج الرؤية' },
+      { id: 'chk_battery', label: 'نظافة أقطاب البطارية وعدم وجود أكسدة', tip: 'ثبات كابلات التوصيل' }
+    ];
+
+    /* ========================================================
+       2. ZEROED / RESET INITIAL APPLICATION STATE
+       ======================================================== */
+    let appState = {
+      currentKm: 0,
+      fuelLogs: [],
+      notes: [],
+      agencyServices: [],
+      checklist: {
+        chk_oil: false,
+        chk_coolant: false,
+        chk_brake: false,
+        chk_tires: false,
+        chk_lights: false,
+        chk_wipers: false,
+        chk_battery: false
+      }
+    };
+
+    let selectedBase64Image = null;
+    let detectedMileageFromAI = null;
+
+    /* ========================================================
+       3. INITIALIZATION
+       ======================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load from LocalStorage if available
+      loadLocalState();
+
+      // Set default dates to today
+      const today = new Date().toISOString().split('T')[0];
+      const fuelDateInput = document.getElementById('fuelDate');
+      if (fuelDateInput) fuelDateInput.value = today;
+      const modalServiceDate = document.getElementById('modalServiceDate');
+      if (modalServiceDate) modalServiceDate.value = today;
+
+      // Sidebar Odometer listener
+      const sidebarOdo = document.getElementById('sidebarOdometerInput');
+      sidebarOdo.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value) || 0;
+        appState.currentKm = val;
+        saveLocalState();
+        updateOdometerDisplays();
+        renderDashboard();
+      });
+
+      initTheme();
+      renderMaintenanceTable();
+      renderChecklist();
+      renderFuelLogs();
+      renderNotes();
+      renderAgencyServices();
+      updateOdometerDisplays();
+      renderDashboard();
+    });
+
+    /* ========================================================
+       PERSISTENCE (LOCAL STORAGE)
+       ======================================================== */
+    function saveLocalState() {
+      try {
+        localStorage.setItem('soueast_s05_app_state', JSON.stringify(appState));
+      } catch (e) {
+        // Fallback for sandboxes
+      }
+    }
+
+    function loadLocalState() {
+      try {
+        const saved = localStorage.getItem('soueast_s05_app_state');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          appState = { ...appState, ...parsed };
+        }
+      } catch (e) {
+        // Fallback
+      }
+    }
+
+    function initTheme() {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      }
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const isClosed = sidebar.classList.contains('translate-x-full');
+      
+      if (isClosed) {
+        sidebar.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.side-btn').forEach(btn => {
+        btn.classList.remove('bg-orange-500', 'text-white', 'shadow-md', 'shadow-orange-500/30');
+        btn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/60');
+      });
+
+      const selectedTab = document.getElementById(`tab-${tabId}`);
+      const selectedBtn = document.getElementById(`sideBtn-${tabId}`);
+      if (selectedTab && selectedBtn) {
+        selectedTab.classList.remove('hidden');
+        selectedBtn.classList.add('bg-orange-500', 'text-white', 'shadow-md', 'shadow-orange-500/30');
+        selectedBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/60');
+      }
+
+      // Close sidebar on mobile
+      if (window.innerWidth < 768) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    /* ========================================================
+       5. RESET ALL DATA
+       ======================================================== */
+    function confirmResetAllData() {
+      appState.currentKm = 0;
+      appState.fuelLogs = [];
+      appState.notes = [];
+      appState.agencyServices = [];
+      Object.keys(appState.checklist).forEach(k => appState.checklist[k] = false);
+
+      saveLocalState();
+      updateOdometerDisplays();
+      renderChecklist();
+      renderFuelLogs();
+      renderNotes();
+      renderAgencyServices();
+      renderDashboard();
+
+      // Clear AI Scanner box
+      clearSelectedImage();
+      document.getElementById('aiResultContent').innerHTML = `
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-center text-slate-400 text-xs">
+          تم تصفير جميع البيانات بنجاح. ابدأ بتسجيل أول قراءة أو التقاط صورة لطبلون سيارتك S05.
+        </div>
+      `;
+      document.getElementById('aiApplyBtnContainer').classList.add('hidden');
+      document.getElementById('aiStatusBadge').textContent = 'تم التصفير';
+
+      showToast('تم تصفير كافة بيانات التطبيق بنجاح');
+    }
+
+    /* ========================================================
+       6. RENDER MAINTENANCE TABLE
+       ======================================================== */
+    function renderMaintenanceTable() {
+      const tbody = document.getElementById('maintenanceTableBody');
+      tbody.innerHTML = '';
+
+      MAINTENANCE_SCHEDULE.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = (idx % 2 === 0 ? 'bg-white dark:bg-slate-800/80' : 'bg-slate-50/50 dark:bg-slate-900/40') + ' hover:bg-orange-50/40 dark:hover:bg-slate-700/40 transition';
+
+        let cellsHtml = `
+          <td class="p-2.5 font-bold text-slate-800 dark:text-slate-100 text-xs">
+            <div class="flex flex-col">
+              <span>${item.name}</span>
+              ${item.note ? `<span class="text-[9px] text-orange-600 dark:text-orange-400 font-normal">${item.note}</span>` : ''}
+            </div>
+          </td>
+        `;
+
+        item.actions.forEach((act, colIndex) => {
+          const colKm = MILESTONE_INTERVALS[colIndex].km;
+          const badgeClass = act === 'R' ? 'badge-r' : 'badge-i';
+          const actTitle = act === 'R' ? 'تغيير إجباري' : 'كشف وتنظيف وضبط';
+          
+          cellsHtml += `
+            <td class="p-2 text-center col-${colKm}">
+              <span class="inline-flex items-center justify-center w-6 h-6 rounded-md text-[11px] font-black ${badgeClass}" title="${actTitle}">
+                ${act}
+              </span>
+            </td>
+          `;
+        });
+
+        tr.innerHTML = cellsHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function highlightScheduleColumn(filterValue) {
+      const allCols = [1000, 10000, 20000, 30000, 40000, 50000, 60000];
+      allCols.forEach(km => {
+        document.querySelectorAll(`.col-${km}`).forEach(cell => {
+          if (filterValue === 'all' || filterValue === String(km)) {
+            cell.style.opacity = '1';
+            cell.style.backgroundColor = (filterValue === String(km)) ? 'rgba(249, 115, 22, 0.12)' : '';
+          } else {
+            cell.style.opacity = '0.3';
+            cell.style.backgroundColor = '';
+          }
+        });
+      });
+    }
+
+    /* ========================================================
+       7. DASHBOARD CALCULATIONS & RENDERING
+       ======================================================== */
+    function updateOdometerDisplays() {
+      const formatted = appState.currentKm.toLocaleString();
+      document.getElementById('mobileNavKm').textContent = formatted;
+      document.getElementById('dashCurrentKmHero').textContent = formatted;
+      document.getElementById('sidebarOdometerInput').value = appState.currentKm;
+      
+      const fuelOdoInput = document.getElementById('fuelOdometer');
+      if (fuelOdoInput && (!fuelOdoInput.value || fuelOdoInput.value === "0")) {
+        fuelOdoInput.value = appState.currentKm;
+      }
+    }
+
+    function getNextServiceMilestone(km) {
+      for (let i = 0; i < MILESTONE_INTERVALS.length; i++) {
+        if (km < MILESTONE_INTERVALS[i].km) {
+          return {
+            target: MILESTONE_INTERVALS[i],
+            targetIndex: i,
+            prev: i > 0 ? MILESTONE_INTERVALS[i-1] : { km: 0, months: 0, label: '0 كم' }
+          };
+        }
+      }
+      const nextCycle = Math.ceil((km + 1) / 10000) * 10000;
+      return {
+        target: { km: nextCycle, months: Math.round(nextCycle / 1250), label: `${nextCycle.toLocaleString()} كم` },
+        targetIndex: 6,
+        prev: { km: nextCycle - 10000, months: 0, label: `${(nextCycle - 10000).toLocaleString()} كم` }
+      };
+    }
+
+    function renderDashboard() {
+      const current = appState.currentKm;
+      const milestone = getNextServiceMilestone(current);
+      const remaining = Math.max(0, milestone.target.km - current);
+
+      // Top Cards
+      document.getElementById('statNextServiceKm').textContent = milestone.target.km.toLocaleString() + ' كم';
+      document.getElementById('statRemainingKm').textContent = `متبقي ${remaining.toLocaleString()} كم`;
+
+      // Last Agency Service Display
+      renderLastAgencyServiceStat();
+
+      // Next Target details
+      document.getElementById('dashTargetKmTitle').textContent = milestone.target.km.toLocaleString() + ' كم';
+      document.getElementById('dashIntervalMonthLimit').textContent = `الحد الأقصى الزمني: ${milestone.target.months} شهر`;
+      document.getElementById('dashPrevBracket').textContent = milestone.prev.km.toLocaleString() + ' كم';
+      document.getElementById('dashNextBracket').textContent = milestone.target.km.toLocaleString() + ' كم';
+
+      const bracketSpan = milestone.target.km - milestone.prev.km;
+      const progressed = current - milestone.prev.km;
+      let percent = Math.min(100, Math.max(0, Math.round((progressed / bracketSpan) * 100)));
+      
+      document.getElementById('dashProgressBar').style.width = `${percent}%`;
+      document.getElementById('dashPercentProgress').textContent = `${percent}% تم قطعها`;
+
+      // Must replace badges
+      const colIndex = Math.min(milestone.targetIndex, 6);
+      const mustReplaceBadges = document.getElementById('dashMustReplaceBadges');
+      mustReplaceBadges.innerHTML = '';
+
+      const replaces = MAINTENANCE_SCHEDULE.filter(item => item.actions[colIndex] === 'R');
+      if (replaces.length === 0) {
+        mustReplaceBadges.innerHTML = `<span class="text-xs text-slate-400">لا توجد قطع استبدال إجباري في هذا النطاق، فقط فحص وضبط.</span>`;
+      } else {
+        replaces.forEach(item => {
+          const badge = document.createElement('span');
+          badge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-lg bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 border border-orange-300 dark:border-orange-800 flex items-center gap-1';
+          badge.innerHTML = `<i class="fa-solid fa-arrows-rotate text-[9px]"></i> ${item.name}`;
+          mustReplaceBadges.appendChild(badge);
+        });
+      }
+
+      // Compact grid items
+      const tasksGrid = document.getElementById('dashTasksCompactGrid');
+      tasksGrid.innerHTML = '';
+
+      MAINTENANCE_SCHEDULE.forEach(item => {
+        const actionCode = item.actions[colIndex];
+        const isReplace = actionCode === 'R';
+        
+        const card = document.createElement('div');
+        card.className = `p-2.5 rounded-xl border transition flex items-center justify-between ${isReplace ? 'border-orange-300 dark:border-orange-800/80 bg-orange-50/50 dark:bg-orange-950/20' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800'}`;
+        card.innerHTML = `
+          <div>
+            <span class="font-bold text-slate-800 dark:text-slate-100 block">${item.name}</span>
+            <span class="text-[10px] text-slate-400">${item.category}</span>
+          </div>
+          <span class="text-[10px] font-black px-2 py-0.5 rounded ${isReplace ? 'badge-r' : 'badge-i'}">
+            ${isReplace ? 'تغيير R' : 'فحص I'}
+          </span>
+        `;
+        tasksGrid.appendChild(card);
+      });
+
+      renderFuelStats();
+    }
+
+    /* ========================================================
+       AGENCY SERVICE TRACKER & MODAL
+       ======================================================== */
+    function openCompleteServiceModal() {
+      const current = appState.currentKm;
+      const milestone = getNextServiceMilestone(current);
+      
+      const select = document.getElementById('modalServiceKmTarget');
+      if (milestone.target && milestone.target.km) {
+        select.value = String(milestone.target.km);
+      }
+      
+      document.getElementById('modalServiceKmActual').value = current || (milestone.target ? milestone.target.km : '');
+      document.getElementById('completeServiceModal').classList.remove('hidden');
+    }
+
+    function closeCompleteServiceModal() {
+      document.getElementById('completeServiceModal').classList.add('hidden');
+    }
+
+    function handleCompleteServiceSubmit(e) {
+      e.preventDefault();
+      const targetVal = document.getElementById('modalServiceKmTarget').value;
+      const date = document.getElementById('modalServiceDate').value;
+      const actualKm = parseInt(document.getElementById('modalServiceKmActual').value) || appState.currentKm;
+      const cost = parseFloat(document.getElementById('modalServiceCost').value) || 0;
+      const center = document.getElementById('modalServiceCenter').value || 'توكيل ساويست المعتمد';
+      const notes = document.getElementById('modalServiceNotes').value;
+
+      const targetTitle = targetVal === 'custom' ? `صيانة دورية عند ${actualKm.toLocaleString()} كم` : `صيانة ${parseInt(targetVal).toLocaleString()} كم`;
+
+      const newRecord = {
+        id: Date.now(),
+        targetKm: targetVal,
+        targetTitle,
+        date,
+        actualKm,
+        cost,
+        center,
+        notes
+      };
+
+      appState.agencyServices.unshift(newRecord);
+
+      // If actual km is higher than current, update odometer
+      if (actualKm > appState.currentKm) {
+        appState.currentKm = actualKm;
+        updateOdometerDisplays();
+      }
+
+      saveLocalState();
+      closeCompleteServiceModal();
+      renderAgencyServices();
+      renderDashboard();
+      showToast(`تم توثيق ${targetTitle} بالتوكيل بنجاح!`);
+    }
+
+    function renderAgencyServices() {
+      const count = appState.agencyServices.length;
+      document.getElementById('agencyBadgeCount').textContent = count;
+      const container = document.getElementById('agencyHistoryList');
+      container.innerHTML = '';
+
+      renderLastAgencyServiceStat();
+
+      if (count === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 text-xs">
+            <i class="fa-solid fa-certificate text-3xl mb-2 text-slate-300 dark:text-slate-600"></i>
+            <p class="font-bold">لا يوجد سجل صيانات بالتوكيل حتى الآن.</p>
+            <p class="text-[11px] mt-1 text-slate-500">سجل صيانتك القادمة ليتم حفظها وتذكيرك بموعد الصيانة التالية تلقائياً.</p>
+          </div>
+        `;
+        return;
+      }
+
+      appState.agencyServices.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-black text-slate-900 dark:text-white">${item.targetTitle}</span>
+              <span class="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-md font-bold">معتمدة بالتوكيل</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <span><i class="fa-regular fa-calendar ml-1 text-orange-500"></i>${item.date}</span>
+              <span><i class="fa-solid fa-gauge ml-1 text-orange-500"></i>${item.actualKm.toLocaleString()} كم</span>
+              <span><i class="fa-solid fa-location-dot ml-1 text-orange-500"></i>${item.center}</span>
+            </div>
+            ${item.notes ? `<p class="text-xs text-slate-600 dark:text-slate-300 mt-1.5 bg-slate-50 dark:bg-slate-800/60 p-2 rounded-xl">${item.notes}</p>` : ''}
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+            ${item.cost ? `<span class="text-sm font-black text-emerald-600 font-mono">${item.cost.toLocaleString()} ج.م</span>` : ''}
+            <button onclick="deleteAgencyService(${item.id})" class="text-slate-300 hover:text-rose-500 p-1.5" title="حذف">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderLastAgencyServiceStat() {
+      const statDisplay = document.getElementById('statLastAgencyServiceDisplay');
+      const statSub = document.getElementById('statLastAgencyServiceSub');
+      const highlightTitle = document.getElementById('highlightAgencyTitle');
+      const highlightDetails = document.getElementById('highlightAgencyDetails');
+      const highlightStats = document.getElementById('highlightAgencyStats');
+
+      if (!appState.agencyServices || appState.agencyServices.length === 0) {
+        if (statDisplay) statDisplay.textContent = 'لم تُسجل';
+        if (statSub) statSub.textContent = 'في انتظار أول صيانة';
+        if (highlightTitle) highlightTitle.textContent = 'لا توجد صيانات مسجلة بعد';
+        if (highlightDetails) highlightDetails.textContent = 'عند زيارة التوكيل وإتمام أي صيانة دورية، قم بتسجيلها هنا لحفظ الضمان وتاريخ السيارة.';
+        if (highlightStats) highlightStats.innerHTML = '';
+        return;
+      }
+
+      const last = appState.agencyServices[0];
+      const diffKm = appState.currentKm - last.actualKm;
+
+      if (statDisplay) statDisplay.textContent = `${last.targetTitle}`;
+      if (statSub) statSub.textContent = `${last.date} (عند ${last.actualKm.toLocaleString()} كم)`;
+
+      if (highlightTitle) highlightTitle.textContent = `${last.targetTitle} (${last.actualKm.toLocaleString()} كم)`;
+      if (highlightDetails) highlightDetails.textContent = `تمت في ${last.center} بتاريخ ${last.date} ${diffKm > 0 ? `(تم قطع ${diffKm.toLocaleString()} كم منذ ذلك الحين)` : ''}`;
+      if (highlightStats) {
+        highlightStats.innerHTML = `
+          <div class="text-sm font-black text-amber-600 dark:text-amber-400 font-mono">${last.actualKm.toLocaleString()} كم</div>
+          <span class="text-[10px] text-slate-400">${last.date}</span>
+        `;
+      }
+    }
+
+    function deleteAgencyService(id) {
+      appState.agencyServices = appState.agencyServices.filter(item => item.id !== id);
+      saveLocalState();
+      renderAgencyServices();
+      renderDashboard();
+      showToast('تم حذف سجل الصيانة');
+    }
+
+    /* ========================================================
+       BACKUP & GITHUB DATA SYNC
+       ======================================================== */
+    function exportDataJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `soueast_s05_data_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('تم تحميل ملف بيانات Soueast S05');
+    }
+
+    function importDataJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported) {
+            appState = { ...appState, ...imported };
+            saveLocalState();
+            updateOdometerDisplays();
+            renderChecklist();
+            renderFuelLogs();
+            renderNotes();
+            renderAgencyServices();
+            renderDashboard();
+            showToast('تم استيراد كافة البيانات بنجاح!');
+          }
+        } catch (err) {
+          showToast('الملف غير صالح أو حدث خطأ أثناء القراءة');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function copyCurrentUrl() {
+      const url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('تم نسخ الرابط! أرسله لهاتفك لفتحه');
+        }).catch(() => {
+          document.execCommand('copy');
+          showToast('تم نسخ الرابط');
+        });
+      } else {
+        document.execCommand('copy');
+        showToast('تم نسخ الرابط');
+      }
+    }
+
+    /* ========================================================
+       AI DASHBOARD SCANNER HANDLERS
+       ======================================================== */
+    function handleImageSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedBase64Image = e.target.result;
+        document.getElementById('imagePreview').src = selectedBase64Image;
+        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+        document.getElementById('analyzeImageBtn').disabled = false;
+        document.getElementById('aiStatusBadge').textContent = 'الصورة جاهزة للتحليل';
+        document.getElementById('aiStatusBadge').className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950 text-orange-600 dark:text-orange-400';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearSelectedImage() {
+      selectedBase64Image = null;
+      detectedMileageFromAI = null;
+      document.getElementById('dashboardImageInput').value = '';
+      document.getElementById('imagePreview').src = '';
+      document.getElementById('imagePreviewContainer').classList.add('hidden');
+      document.getElementById('analyzeImageBtn').disabled = true;
+      document.getElementById('aiStatusBadge').textContent = 'في انتظار رفع الصورة';
+      document.getElementById('aiStatusBadge').className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500';
+      document.getElementById('aiApplyBtnContainer').classList.add('hidden');
+    }
+
+    async function analyzeDashboardImage() {
+      if (!selectedBase64Image) return;
+
+      const loading = document.getElementById('aiLoadingIndicator');
+      const resultContent = document.getElementById('aiResultContent');
+      const applyBtnContainer = document.getElementById('aiApplyBtnContainer');
+      const statusBadge = document.getElementById('aiStatusBadge');
+
+      loading.classList.remove('hidden');
+      resultContent.classList.add('hidden');
+      applyBtnContainer.classList.add('hidden');
+      statusBadge.textContent = 'جارٍ الفحص...';
+
+      const pureBase64 = selectedBase64Image.split(',')[1];
+      const mimeTypeMatch = selectedBase64Image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+      const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
+
+      const prompt = `أنت خبير سيارات وفاحص فني متخصص في طراز ساويست Soueast S05.
+افحص صورة شاشة العدادات أو الطبلون وأجب بدقة:
+1. استخرج رقم قراءة العداد الكلي بالكيلومتر (Odometer / Total KM) إن وجد كرقم فقط ثم بينه.
+2. اذكر أي لمبات تحذيرية مضاءة تراها (مثل: Check Engine, ABS, فرامل اليد, الإيرباج, حرارة المحرك، البطارية).
+3. اكتب توصية سريعة ومختصرة لمالك السيارة.
+
+يرجى إعطاء الإجابة بتنسيق JSON بالشكل التالي حصراً:
+{
+  "detectedMileage": 15000,
+  "warnings": ["لمبة فحص المحرك", "حرارة مرتفعة"],
+  "summary": "ملخص الفحص وحالة الطبلون",
+  "recommendation": "نصيحة الصيانة الفورية"
+}`;
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const payload = {
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: prompt },
+                {
+                  inlineData: {
+                    mimeType: mimeType,
+                    data: pureBase64
+                  }
+                }
+              ]
+            }
+          ]
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        const candidateText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        loading.classList.add('hidden');
+        resultContent.classList.remove('hidden');
+
+        if (!candidateText) {
+          resultContent.innerHTML = `<div class="p-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 rounded-xl text-xs">تعذر استخراج البيانات من الصورة. يرجى التأكد من وضوح شاشة العدادات وإعادة المحاولة.</div>`;
+          statusBadge.textContent = 'فشل التحليل';
+          return;
+        }
+
+        // Parse JSON output if present or extract cleanly
+        let parsed = null;
+        try {
+          const jsonMatch = candidateText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            parsed = JSON.parse(jsonMatch[0]);
+          }
+        } catch (e) {}
+
+        if (parsed) {
+          detectedMileageFromAI = typeof parsed.detectedMileage === 'number' ? parsed.detectedMileage : parseInt(parsed.detectedMileage) || null;
+
+          let warningsHtml = '';
+          if (parsed.warnings && parsed.warnings.length > 0) {
+            warningsHtml = `
+              <div class="mt-2 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40">
+                <span class="text-xs font-bold text-rose-600 dark:text-rose-400 block mb-1">
+                  <i class="fa-solid fa-triangle-exclamation"></i> لمبات تحذيرية تم رصدها:
+                </span>
+                <ul class="text-[11px] list-disc pr-4 text-rose-700 dark:text-rose-300">
+                  ${parsed.warnings.map(w => `<li>${w}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+          } else {
+            warningsHtml = `
+              <div class="mt-2 p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-check"></i> لا توجد لمبات تحذيرية خطيرة ظاهرة على الطبلون.
+              </div>
+            `;
+          }
+
+          resultContent.innerHTML = `
+            <div class="space-y-2">
+              <div class="p-3 rounded-xl bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900 flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">العداد المستخرج:</span>
+                <span class="text-base font-black text-orange-600 font-mono">${detectedMileageFromAI !== null ? `${detectedMileageFromAI.toLocaleString()} كم` : 'غير محدد بدقة'}</span>
+              </div>
+              ${warningsHtml}
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border border-slate-100 dark:border-slate-800">
+                <strong>تقرير الفحص:</strong> ${parsed.summary || ''}
+                <div class="mt-1 text-orange-600 dark:text-orange-400 font-semibold">${parsed.recommendation || ''}</div>
+              </div>
+            </div>
+          `;
+
+          if (detectedMileageFromAI !== null) {
+            applyBtnContainer.classList.remove('hidden');
+          }
+          statusBadge.textContent = 'اكتمل التحليل بنجاح';
+          statusBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400';
+        } else {
+          resultContent.innerHTML = `<div class="p-3 bg-slate-50 dark:bg-slate-900 text-xs leading-relaxed whitespace-pre-line">${candidateText}</div>`;
+          statusBadge.textContent = 'اكتمل التحليل';
+        }
+
+      } catch (err) {
+        loading.classList.add('hidden');
+        resultContent.classList.remove('hidden');
+        resultContent.innerHTML = `<div class="p-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 rounded-xl text-xs">حدث خطأ أثناء الاتصال بنموذج الذكاء الاصطناعي. يرجى التأكد من اتصال الإنترنت.</div>`;
+        statusBadge.textContent = 'خطأ اتصال';
+      }
+    }
+
+    function applyAiDetectedMileage() {
+      if (detectedMileageFromAI !== null) {
+        appState.currentKm = detectedMileageFromAI;
+        saveLocalState();
+        updateOdometerDisplays();
+        renderDashboard();
+        showToast(`تم تحديث عداد سيارتك S05 إلى ${detectedMileageFromAI.toLocaleString()} كم!`);
+      }
+    }
+
+    /* ========================================================
+       9. AI MAINTENANCE DIAGNOSTIC REPORT
+       ======================================================== */
+    async function requestAiMaintenanceAnalysis() {
+      const box = document.getElementById('aiGeneralDiagnosisBox');
+      box.innerHTML = `
+        <div class="flex items-center gap-2 text-orange-500 font-bold">
+          <i class="fa-solid fa-spinner animate-spin"></i>
+          <span>يقوم خبير الذكاء الاصطناعي الآن بمراجعة حالة Soueast S05 وجدول صيانتها...</span>
+        </div>
+      `;
+
+      const prompt = `أنت مهندس صيانة سيارات معتمد وخبير في طراز Soueast S05 (محرك ميتسوبيشي تيربو، ناقل CVT أو أوتوماتيك).
+بيانات السيارة الحالية:
+- العداد الحالي: ${appState.currentKm} كم
+- عدد تفويلات البنزين المسجلة: ${appState.fuelLogs.length}
+- الملاحظات المدونة: ${JSON.stringify(appState.notes)}
+
+قدّم نصيحة مهنية وتقريراً مختصراً ومركّزاً (في 3 إلى 4 نقاط عملية) لمالك السيارة تشمل:
+1. ماذا يجب عليه فحصه أو تغييره بدقة في المرحلة الحالية طبقاً لجدول ساويست.
+2. نصيحة للمحافظة على الفتيس (CVT / AT) ومصفاة الفتيس.
+3. توجيه للحفاظ على أفضل استهلاك للبنزين.`;
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+
+        const result = await response.json();
+        const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          box.innerHTML = `<div class="whitespace-pre-line text-xs sm:text-sm leading-relaxed">${text}</div>`;
+        } else {
+          box.textContent = 'يرجى مراجعة الصيانة الدورية عند أقرب كيلومتر مستهدف.';
+        }
+      } catch (e) {
+        box.textContent = 'تعذر الاتصال بالذكاء الاصطناعي حالياً، يرجى المحاولة لاحقاً.';
+      }
+    }
+
+    /* ========================================================
+       10. FUEL LOGS
+       ======================================================== */
+    function handleRefuelSubmit(e) {
+      e.preventDefault();
+      const odo = parseInt(document.getElementById('fuelOdometer').value) || 0;
+      const liters = parseFloat(document.getElementById('fuelLiters').value) || 0;
+      const cost = parseFloat(document.getElementById('fuelCost').value) || 0;
+      const octane = document.getElementById('fuelOctane').value;
+      const date = document.getElementById('fuelDate').value;
+      const station = document.getElementById('fuelStation').value || 'محطة وقود';
+
+      let distanceDiff = 0;
+      if (appState.fuelLogs.length > 0) {
+        const prev = appState.fuelLogs[appState.fuelLogs.length - 1];
+        if (odo > prev.odometer) {
+          distanceDiff = odo - prev.odometer;
+        }
+      }
+
+      const newLog = {
+        id: Date.now(),
+        date,
+        odometer: odo,
+        liters,
+        cost,
+        octane,
+        station,
+        distanceDiff
+      };
+
+      appState.fuelLogs.push(newLog);
+
+      if (odo > appState.currentKm) {
+        appState.currentKm = odo;
+        updateOdometerDisplays();
+      }
+
+      saveLocalState();
+      document.getElementById('fuelLiters').value = '';
+      document.getElementById('fuelCost').value = '';
+      document.getElementById('fuelStation').value = '';
+
+      renderFuelLogs();
+      renderDashboard();
+      showToast('تم تسجيل التفويلة بنجاح');
+    }
+
+    function renderFuelLogs() {
+      const tbody = document.getElementById('fuelTableBody');
+      tbody.innerHTML = '';
+
+      const count = appState.fuelLogs.length;
+      document.getElementById('fuelRecordsCount').textContent = `${count} تفويلات`;
+
+      if (count === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-slate-400">لا توجد تفويلات بنزين مسجلة. أضف أول تفويلة أعلاه.</td></tr>`;
+        renderFuelStats();
+        return;
+      }
+
+      const sorted = [...appState.fuelLogs].reverse();
+
+      sorted.forEach(log => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-700/30 transition';
+        tr.innerHTML = `
+          <td class="p-2.5 font-semibold text-slate-700 dark:text-slate-300">${log.date}</td>
+          <td class="p-2.5 font-bold text-orange-600 font-mono">${log.odometer.toLocaleString()} كم</td>
+          <td class="p-2.5 text-slate-500">${log.distanceDiff > 0 ? `${log.distanceDiff} كم` : '--'}</td>
+          <td class="p-2.5 font-semibold">${log.liters} لتر</td>
+          <td class="p-2.5 font-bold text-emerald-600">${log.cost ? `${log.cost} ج.م` : '--'}</td>
+          <td class="p-2.5 text-slate-500">${log.octane ? `بنزين ${log.octane}` : ''} (${log.station})</td>
+          <td class="p-2.5 text-center">
+            <button onclick="deleteFuelLog(${log.id})" class="text-rose-500 hover:text-rose-700 p-1">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderFuelStats();
+    }
+
+    function deleteFuelLog(id) {
+      appState.fuelLogs = appState.fuelLogs.filter(item => item.id !== id);
+      saveLocalState();
+      renderFuelLogs();
+      renderDashboard();
+      showToast('تم حذف السجل');
+    }
+
+    function renderFuelStats() {
+      if (appState.fuelLogs.length === 0) {
+        document.getElementById('statLastRefuelDisplay').textContent = 'لم تُسجل';
+        document.getElementById('statLastRefuelSub').textContent = '0 لتر';
+        document.getElementById('statTotalLiters').textContent = '0 لتر';
+        document.getElementById('statTotalFuelCost').textContent = '0 ج.م';
+        document.getElementById('statFuelEfficiency').textContent = '--';
+        document.getElementById('statConsumptionRate').textContent = '-- كم/لتر';
+        return;
+      }
+
+      const last = appState.fuelLogs[appState.fuelLogs.length - 1];
+      document.getElementById('statLastRefuelDisplay').textContent = `${last.odometer.toLocaleString()} كم`;
+      document.getElementById('statLastRefuelSub').textContent = `${last.liters} لتر (${last.date})`;
+
+      let totalCost = 0;
+      let totalLiters = 0;
+      let totalDistance = 0;
+
+      appState.fuelLogs.forEach(item => {
+        totalCost += (item.cost || 0);
+        totalLiters += item.liters;
+        if (item.distanceDiff > 0) {
+          totalDistance += item.distanceDiff;
+        }
+      });
+
+      document.getElementById('statTotalFuelCost').textContent = `${totalCost.toLocaleString()} ج.م`;
+      document.getElementById('statTotalLiters').textContent = `${totalLiters.toFixed(1)} لتر`;
+
+      if (totalDistance > 0 && totalLiters > 0) {
+        const kmPerLiter = (totalDistance / totalLiters).toFixed(1);
+        document.getElementById('statFuelEfficiency').textContent = `${kmPerLiter} كم/لتر`;
+        document.getElementById('statConsumptionRate').textContent = `${kmPerLiter} كم/لتر`;
+      }
+    }
+
+    /* ========================================================
+       11. NOTES & REPAIRS
+       ======================================================== */
+    function handleNoteSubmit(e) {
+      e.preventDefault();
+      const category = document.getElementById('noteCategory').value;
+      const title = document.getElementById('noteTitle').value;
+      const km = parseInt(document.getElementById('noteKm').value) || appState.currentKm;
+      const cost = parseFloat(document.getElementById('noteCost').value) || 0;
+      const details = document.getElementById('noteDetails').value;
+      const today = new Date().toISOString().split('T')[0];
+
+      const newNote = {
+        id: Date.now(),
+        date: today,
+        title,
+        category,
+        km,
+        cost,
+        details
+      };
+
+      appState.notes.unshift(newNote);
+      saveLocalState();
+
+      document.getElementById('noteTitle').value = '';
+      document.getElementById('noteDetails').value = '';
+      document.getElementById('noteCost').value = '';
+
+      renderNotes();
+      showToast('تم حفظ الملاحظة بنجاح');
+    }
+
+    function renderNotes() {
+      const container = document.getElementById('notesContainer');
+      container.innerHTML = '';
+
+      document.getElementById('notesCount').textContent = `${appState.notes.length} ملاحظات`;
+
+      if (appState.notes.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white dark:bg-slate-800/90 p-6 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 text-center text-slate-400 text-xs">
+            <i class="fa-regular fa-clipboard text-2xl mb-1 text-slate-300"></i>
+            <p>لا توجد ملاحظات أو أعطال مسجلة حتى الآن.</p>
+          </div>
+        `;
+        return;
+      }
+
+      appState.notes.forEach(note => {
+        const card = document.createElement('div');
+        card.className = 'bg-white dark:bg-slate-800/90 rounded-2xl p-3.5 border border-slate-200 dark:border-slate-800 shadow-xs transition';
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="text-[10px] px-2 py-0.5 rounded-md font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                  ${note.category}
+                </span>
+                <span class="text-[10px] text-slate-400 font-medium">${note.date}</span>
+                <span class="text-[10px] font-bold text-orange-600 bg-orange-50 dark:bg-orange-950 px-1.5 py-0.5 rounded">
+                  ${note.km ? `${note.km.toLocaleString()} كم` : ''}
+                </span>
+              </div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">${note.title}</h4>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              ${note.cost ? `<span class="text-xs font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded-lg">${note.cost} ج.م</span>` : ''}
+              <button onclick="deleteNote(${note.id})" class="text-slate-300 hover:text-rose-500 p-1" title="حذف">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+          ${note.details ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 bg-slate-50 dark:bg-slate-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">${note.details}</p>` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteNote(id) {
+      appState.notes = appState.notes.filter(n => n.id !== id);
+      saveLocalState();
+      renderNotes();
+      showToast('تم حذف الملاحظة');
+    }
+
+    /* ========================================================
+       12. QUICK CHECKLIST
+       ======================================================== */
+    function renderChecklist() {
+      const container = document.getElementById('checklistItemsContainer');
+      container.innerHTML = '';
+
+      CHECKLIST_ITEMS.forEach(item => {
+        const isChecked = !!appState.checklist[item.id];
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-xl border transition cursor-pointer flex items-start gap-2.5 ${isChecked ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800' : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800'}`;
+        div.onclick = () => toggleChecklistItem(item.id);
+
+        div.innerHTML = `
+          <div class="w-5 h-5 rounded-md flex items-center justify-center transition mt-0.5 ${isChecked ? 'bg-emerald-500 text-white' : 'border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-transparent'}">
+            <i class="fa-solid fa-check text-[10px]"></i>
+          </div>
+          <div class="flex-1">
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block ${isChecked ? 'line-through text-slate-400 dark:text-slate-500' : ''}">
+              ${item.label}
+            </span>
+            <span class="text-[10px] text-slate-400 mt-0.5 block">${item.tip}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      calculateChecklistStats();
+    }
+
+    function toggleChecklistItem(id) {
+      appState.checklist[id] = !appState.checklist[id];
+      saveLocalState();
+      renderChecklist();
+    }
+
+    function calculateChecklistStats() {
+      const total = CHECKLIST_ITEMS.length;
+      let completed = 0;
+      CHECKLIST_ITEMS.forEach(i => {
+        if (appState.checklist[i.id]) completed++;
+      });
+      const percent = Math.round((completed / total) * 100);
+      const chkPercentageEl = document.getElementById('checklistPercentage');
+      if (chkPercentageEl) {
+        chkPercentageEl.textContent = `${percent}% (${completed} من ${total})`;
+      }
+    }
+
+    function resetChecklist() {
+      CHECKLIST_ITEMS.forEach(i => appState.checklist[i.id] = false);
+      saveLocalState();
+      renderChecklist();
+      showToast('تمت إعادة تعيين الفحص السريع');
+    }
+
+    function saveChecklistProgress() {
+      saveLocalState();
+      showToast('تم اعتماد فحص السيارة بنجاح!');
+    }
+
+    /* ========================================================
+       13. TOAST
+       ======================================================== */
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('toastMessage');
+      const text = document.getElementById('toastText');
+      text.textContent = msg;
+      toast.classList.remove('hidden');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
