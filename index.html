@@ -261,6 +261,10 @@
 
       <!-- Bottom Controls -->
       <div class="p-2.5 border-t border-slate-200 dark:border-slate-800/90 space-y-1.5">
+        <div id="systemIntegrityBadge" class="px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-between text-[9px] font-mono text-emerald-700 dark:text-emerald-400">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-shield-check"></i> فحص النظام: سليم</span>
+          <span id="integrityFunctionCount">100%</span>
+        </div>
         <div class="flex items-center gap-1.5">
           <button onclick="toggleTheme()" class="flex-1 py-1 px-2 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[10px] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center gap-1">
             <i class="fa-solid fa-moon text-[10px]" id="themeIconSidebar"></i> <span>المظهر</span>
@@ -368,22 +372,55 @@
           <!-- Quick AI Assistant & Advice -->
           <div class="bg-white dark:bg-[#101520] p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
             <div>
-              <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">
-                <div class="w-6 h-6 rounded bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 flex items-center justify-center text-xs">
-                  <i class="fa-solid fa-robot"></i>
+              <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-robot"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-800 dark:text-white">التقرير والتحليل الذكي الفوري</h4>
+                    <p class="text-[9px] text-slate-500 dark:text-slate-400">تشخيص فني وبند المراقبة والتدقيق</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 class="text-xs font-bold text-slate-800 dark:text-white">المساعد الذكي لـ Soueast S05</h4>
-                  <p class="text-[9px] text-slate-500 dark:text-slate-400">تحليل فني لسلامة المركبة</p>
-                </div>
+                <span class="text-[8px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">OBD2 Ready</span>
               </div>
-              <div id="dashAiInsightText" class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed space-y-1.5">
-                <p>• محرك ساويست تيربو يحتاج للالتزام بلزوجة الزيت الموصى بها (5W-30 / 5W-40 التخليقي بالكامل).</p>
-                <p>• تنبيه: يتم تغيير مصفاة الفتيس الأوتوماتيك عند تغيير زيت الفتيس لسيارات الـ 1600 فقط.</p>
+
+              <!-- Structured & Styled AI Report Container -->
+              <div id="dashAiInsightText" class="space-y-2 text-[11px] leading-relaxed">
+                <!-- Card 1: Engine & Fuel -->
+                <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800">
+                  <div class="flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-100 mb-0.5">
+                    <i class="fa-solid fa-engine text-orange-500 text-[10px]"></i>
+                    <span>1. المحرك والوقود الموصى به</span>
+                  </div>
+                  <p class="text-slate-600 dark:text-slate-300 text-[10.5px]">الالتزام ببنزين <strong>92</strong> حسب دليل المالك، مع استخدام زيت تخليقي بالكامل (5W-30 / 5W-40) لحماية شاحن التيربو.</p>
+                </div>
+
+                <!-- Card 2: Transmission -->
+                <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800">
+                  <div class="flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-100 mb-0.5">
+                    <i class="fa-solid fa-gears text-sky-500 text-[10px]"></i>
+                    <span>2. ناقل الحركة (الفتيس الأوتوماتيك)</span>
+                  </div>
+                  <p class="text-slate-600 dark:text-slate-300 text-[10.5px]">يلزم تغيير <strong>مصفاة الفتيس الأوتوماتيك</strong> بالتزامن مع تغيير زيت الفتيس (خاصة لطرازات 1600cc).</p>
+                </div>
+
+                <!-- Card 3: OBD2 & Monitoring Audit -->
+                <div class="p-2 rounded-lg bg-orange-50/70 dark:bg-orange-500/10 border border-orange-200/80 dark:border-orange-500/30">
+                  <div class="flex items-center gap-1.5 font-bold text-orange-700 dark:text-orange-400 mb-1">
+                    <i class="fa-solid fa-laptop-medical text-[10px]"></i>
+                    <span>3. التعامل مع أجهزة الفحص وبند المراقبة والتدقيق</span>
+                  </div>
+                  <ul class="space-y-1 text-[10px] text-slate-700 dark:text-slate-300 list-disc list-inside">
+                    <li><strong>قراءة الأعطال (DTCs):</strong> فحص الأكواد المخزنة والحالية قبل مسحها لتحديد السبب الجذري.</li>
+                    <li><strong>المراقبة والتدقيق الحي (Live Data):</strong> تدقيق قيم حساس الأكسجين، ضغط التيربو، حرارة سائل التبريد، ونسب تصحيح الوقود (Fuel Trim).</li>
+                    <li><strong>المعايرة (Reset/Adaptation):</strong> عدم إجراء إعادة ضبط عشوائية للبوابة أو الفتيس إلا بعد إتمام الصيانة الميكانيكية.</li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <button onclick="requestAiMaintenanceAdvice()" class="mt-3 w-full py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-wand-magic-sparkles text-orange-500 text-[10px]"></i> طلب تقرير وتحليل ذكي فوري
+            <button onclick="requestAiMaintenanceAdvice()" class="mt-2.5 w-full py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs">
+              <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> تحديث التقرير وتحليل بيانات السيارة الآن
             </button>
           </div>
         </div>
@@ -404,8 +441,12 @@
             </div>
             <div class="flex items-center gap-2">
               <input type="file" id="dashboardCameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleDashboardImageSelected(event)">
+              <input type="file" id="dashboardGalleryInput" accept="image/*" class="hidden" onchange="handleDashboardImageSelected(event)">
               <button onclick="document.getElementById('dashboardCameraInput').click()" class="px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
-                <i class="fa-solid fa-camera text-[10px]"></i> التقاط / اختيار صورة
+                <i class="fa-solid fa-camera text-[10px]"></i> الكاميرا
+              </button>
+              <button onclick="document.getElementById('dashboardGalleryInput').click()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 shadow-xs">
+                <i class="fa-solid fa-image text-[10px] text-orange-500"></i> رفع صورة
               </button>
             </div>
           </div>
@@ -430,14 +471,18 @@
                 <div id="aiScanOutputBox" class="hidden space-y-2">
                   <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <div>
-                      <span class="text-[10px] text-slate-500 dark:text-slate-400 block">قراءة العداد المستخرجة</span>
-                      <div class="flex items-baseline gap-1 mt-0.5">
+                      <span class="text-[10px] text-slate-500 dark:text-slate-400 block">قراءة العداد المستخرجة (ODO)</span>
+                      <div class="flex flex-wrap items-baseline gap-1.5 mt-0.5">
                         <span id="aiDetectedMileage" class="text-lg font-mono font-extrabold text-orange-600 dark:text-orange-400">0</span>
                         <span class="text-xs text-slate-500 dark:text-slate-400">كم</span>
+                        <span id="aiScanTimestampBadge" class="text-[9px] bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 px-1.5 py-0.5 rounded font-mono"></span>
+                        <span id="aiAutoSavedBadge" class="hidden text-[9px] bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 px-1.5 py-0.5 rounded font-bold">
+                          <i class="fa-solid fa-check-double"></i> تم الحفظ تلقائياً
+                        </span>
                       </div>
                     </div>
                     <button onclick="applyDetectedMileageToCar()" class="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1">
-                      <i class="fa-solid fa-check text-[10px]"></i> اعتماد وتحديث العداد
+                      <i class="fa-solid fa-rotate text-[10px]"></i> تأكيد القراءة
                     </button>
                   </div>
 
@@ -545,9 +590,13 @@
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <input type="file" id="fuelScanInput" accept="image/*" capture="environment" class="hidden" onchange="handleFuelImageSelected(event)">
-              <button onclick="document.getElementById('fuelScanInput').click()" class="px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
-                <i class="fa-solid fa-camera text-[10px]"></i> التقاط / رفع صورة
+              <input type="file" id="fuelCameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleFuelImageSelected(event)">
+              <input type="file" id="fuelGalleryInput" accept="image/*" class="hidden" onchange="handleFuelImageSelected(event)">
+              <button onclick="document.getElementById('fuelCameraInput').click()" class="px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
+                <i class="fa-solid fa-camera text-[10px]"></i> الكاميرا
+              </button>
+              <button onclick="document.getElementById('fuelGalleryInput').click()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center gap-1.5 border border-orange-300 dark:border-slate-700 shadow-xs">
+                <i class="fa-solid fa-image text-[10px] text-orange-500"></i> رفع صورة
               </button>
             </div>
           </div>
@@ -633,15 +682,28 @@
                 <div>
                   <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">نوع الوقود</label>
                   <select id="fuelOctane" class="compact-input text-[11px]">
-                    <option value="95">بنزين 95 (الموصى به لـ Turbo)</option>
-                    <option value="92">بنزين 92</option>
+                    <option value="92" selected>بنزين 92 (الموصى به بدليل السيارة)</option>
+                    <option value="95">بنزين 95</option>
                     <option value="98">بنزين 98</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">ملاحظة / اسم المحطة (اختياري)</label>
-                <input type="text" id="fuelStation" placeholder="مثال: شل أوت - تفويلة كاملة" class="compact-input">
+                <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">اسم محطة الوقود</label>
+                <select id="fuelStation" class="compact-input text-[11px]">
+                  <option value="شل أوت (ChillOut)">شل أوت (ChillOut)</option>
+                  <option value="وطنية (Wataniya)">وطنية (Wataniya)</option>
+                  <option value="توتال إنرجيز (TotalEnergies)">توتال إنرجيز (TotalEnergies)</option>
+                  <option value="إمارات مصر (Emarat Misr)">إمارات مصر (Emarat Misr)</option>
+                  <option value="موبيل (Mobil)">موبيل (Mobil)</option>
+                  <option value="التعاون للبترول (Co-op)">التعاون للبترول (Co-op)</option>
+                  <option value="مصر للبترول (Misr Petroleum)">مصر للبترول (Misr Petroleum)</option>
+                  <option value="طاقة (TAQA)">طاقة (TAQA)</option>
+                  <option value="أولا إنرجي (OLA Energy)">أولا إنرجي (OLA Energy)</option>
+                  <option value="إيني (Eni)">إيني (Eni)</option>
+                  <option value="كالتكس (Caltex)">كالتكس (Caltex)</option>
+                  <option value="أخرى">محطة أخرى</option>
+                </select>
               </div>
               <button type="submit" class="w-full py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 mt-2 shadow-xs">
                 <i class="fa-solid fa-plus text-[10px]"></i> حفظ سجل التعبئة
@@ -650,8 +712,13 @@
           </div>
 
           <!-- Fuel Stats & Logs -->
-          <div class="lg:col-span-2 space-y-2">
-            <div class="grid grid-cols-3 gap-2">
+          <div class="lg:col-span-2 space-y-2.5">
+            <!-- 4 Key Analytics Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div class="bg-white dark:bg-[#101520] p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-xs">
+                <span class="text-[9px] text-slate-500 dark:text-slate-400 block">مرات التفويل</span>
+                <span id="fuelTotalCount" class="text-sm font-mono font-extrabold text-orange-600 dark:text-orange-400">0</span>
+              </div>
               <div class="bg-white dark:bg-[#101520] p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-xs">
                 <span class="text-[9px] text-slate-500 dark:text-slate-400 block">إجمالي اللترات</span>
                 <span id="fuelTotalLiters" class="text-sm font-mono font-bold text-slate-900 dark:text-white">0</span>
@@ -661,13 +728,32 @@
                 <span id="fuelTotalCost" class="text-sm font-mono font-bold text-slate-900 dark:text-white">0 ج.م</span>
               </div>
               <div class="bg-white dark:bg-[#101520] p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-xs">
-                <span class="text-[9px] text-slate-500 dark:text-slate-400 block">متوسط الاستهلاك</span>
+                <span class="text-[9px] text-slate-500 dark:text-slate-400 block">نسبة الاستهلاك</span>
                 <span id="fuelAvgEconomy" class="text-sm font-mono font-bold text-emerald-600 dark:text-emerald-400">--</span>
               </div>
             </div>
 
+            <!-- Monthly Fuel Cost & Consumption Breakdown -->
             <div class="bg-white dark:bg-[#101520] p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <h4 class="text-xs font-bold text-slate-800 dark:text-white mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">سجل التعبئات السابقة</h4>
+              <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">
+                <h4 class="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-calendar-days text-orange-500 text-[11px]"></i> التحليل الشهري لتكلفة وكميات الوقود
+                </h4>
+                <span id="fuelAvgCostPerKm" class="text-[9px] font-mono text-slate-500 dark:text-slate-400">تكلفة الكيلومتر: --</span>
+              </div>
+              <div id="fuelMonthlyAnalytics" class="space-y-1.5 max-h-44 overflow-y-auto pr-1">
+                <!-- Rendered monthly breakdown -->
+              </div>
+            </div>
+
+            <!-- Detailed Fuel History -->
+            <div class="bg-white dark:bg-[#101520] p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">
+                <h4 class="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-receipt text-sky-500 text-[11px]"></i> سجل وتفاصيل كل تعبئة
+                </h4>
+                <span class="text-[9px] text-slate-400">مرتب بالأحدث</span>
+              </div>
               <div id="fuelHistoryList" class="space-y-1.5 max-h-72 overflow-y-auto pr-1">
                 <!-- Rendered fuel items -->
               </div>
@@ -900,76 +986,175 @@
        ========================================== -->
   <script>
     /* ========================================================
-       DATA MODEL & OFFICIAL SCHEDULE SPECIFICATIONS
+       CORE CONSTANTS, DATA STRUCTURES & INITIAL STATE
        ======================================================== */
+    const STORAGE_KEY = 'soueast_s05_care_state_v2';
+
     const SCHEDULE_MILESTONES = [
-      { km: 1000, months: 8, label: '1,000 كم' },
-      { km: 10000, months: 8, label: '10,000 كم' },
-      { km: 20000, months: 16, label: '20,000 كم' },
-      { km: 30000, months: 24, label: '30,000 كم' },
-      { km: 40000, months: 32, label: '40,000 كم' },
-      { km: 50000, months: 40, label: '50,000 كم' },
-      { km: 60000, months: 48, label: '60,000 كم' }
+      { km: 1000, months: 8 },
+      { km: 10000, months: 8 },
+      { km: 20000, months: 16 },
+      { km: 30000, months: 24 },
+      { km: 40000, months: 32 },
+      { km: 50000, months: 40 },
+      { km: 60000, months: 48 }
     ];
 
-    // Official items exactly as in the attached image
     const OFFICIAL_MAINTENANCE_ITEMS = [
-      { name: "زيت المحرك وفلتر الزيت", actions: ["R", "R", "R", "R", "R", "R", "R"] },
-      { name: "شمعة الإشعال (البوجيهات)", actions: ["I", "I", "I", "R", "I", "I", "R"] },
-      { name: "فلتر الهواء", actions: ["I", "I", "R", "I", "R", "I", "R"] },
-      { name: "فلتر التكييف", actions: ["I", "I", "R", "I", "R", "I", "R"] },
-      { name: "سائل الفرامل", actions: ["I", "I", "I", "I", "I", "I", "R"] },
-      { name: "زيت ناقل الحركة (الفتيس)", actions: ["I", "I", "I", "I", "I", "R", "I"] },
-      { name: "فلتر زيت ناقل الحركة", actions: ["I", "I", "I", "I", "I", "R", "I"] },
-      { name: "سير المجموعة", actions: ["I", "I", "I", "I", "I", "I", "R"] },
-      { name: "شفرات مساحات الزجاج الأمامي", actions: ["I", "I", "I", "I", "I", "I", "I"] },
-      { name: "شفرات مساحات الزجاج الخلفي", actions: ["I", "I", "I", "I", "I", "I", "I"] },
-      { name: "سائل التبريد (مياه الردياتير)", actions: ["I", "I", "I", "I", "R", "I", "I"] },
-      { name: "سائل المساحات", actions: ["I", "I", "I", "I", "I", "I", "I"] },
-      { name: "وصلات التوجيه (العفشة والميزان)", actions: ["I", "I", "I", "I", "I", "I", "I"] },
-      { name: "ممتص الصدمات (المساعدين)", actions: ["I", "I", "I", "I", "I", "I", "I"] },
-      { name: "لوحة الفرامل (تيل الفرامل)", actions: ["I", "I", "I", "I", "I", "I", "I"] }
+      { name: "زيت المحرك وفلتر الزيت", actions: ['R', 'R', 'R', 'R', 'R', 'R', 'R'] },
+      { name: "شمعة الإشعال (البوجيهات)", actions: ['I', 'I', 'I', 'R', 'I', 'I', 'R'] },
+      { name: "فلتر الهواء", actions: ['I', 'I', 'R', 'I', 'R', 'I', 'R'] },
+      { name: "فلتر التكييف", actions: ['I', 'I', 'R', 'I', 'R', 'I', 'R'] },
+      { name: "سائل الفرامل", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'R'] },
+      { name: "زيت ناقل الحركة (الفتيس)", actions: ['I', 'I', 'I', 'I', 'I', 'R', 'I'] },
+      { name: "فلتر زيت ناقل الحركة", actions: ['I', 'I', 'I', 'I', 'I', 'R', 'I'] },
+      { name: "سير المجموعة", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'R'] },
+      { name: "شفرات مساحات الزجاج الأمامي", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] },
+      { name: "شفرات مساحات الزجاج الخلفي", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] },
+      { name: "سائل التبريد", actions: ['I', 'I', 'I', 'I', 'R', 'I', 'I'] },
+      { name: "سائل المساحات", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] },
+      { name: "وصلات التوجيه", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] },
+      { name: "ممتص الصدمات (المساعدين)", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] },
+      { name: "لوحة الفرامل (التيل والطنابير)", actions: ['I', 'I', 'I', 'I', 'I', 'I', 'I'] }
     ];
 
     const QUICK_CHECKLIST_TEMPLATE = [
-      { id: "chk_oil", title: "مستوى زيت المحرك ولونه عبر مقياس الزيت", period: "أسبوعياً" },
-      { id: "chk_coolant", title: "مستوى سائل التبريد في قربة الردياتير (دون فتح والسيارة ساخنة)", period: "أسبوعياً" },
-      { id: "chk_tire_pressure", title: "ضغط هواء الإطارات الأربعة والإطار الاحتياطي (32-34 PSI)", period: "كل أسبوعين" },
-      { id: "chk_brake_fluid", title: "مستوى سائل الفرامل في الخزان الرئيسي", period: "شهرياً" },
-      { id: "chk_washer", title: "امتلاء خزان مياه المساحات وإضافة سائل تنظيف الزجاج", period: "أسبوعياً" },
-      { id: "chk_battery", title: "نظافة أقطاب البطارية وعدم وجود أملاح أو تأكسد", period: "شهرياً" },
-      { id: "chk_lights", title: "سلامة الإضاءة الأمامية، العالية، وإشارات الانعطاف والفرامل", period: "قبل السفر" }
+      { id: 'chk_oil', title: 'فحص مستوى ولزوجة زيت المحرك (على البارد)', period: 'أسبوعياً' },
+      { id: 'chk_coolant', title: 'فحص مستوى سائل التبريد في القربة الاحتياطية', period: 'أسبوعياً' },
+      { id: 'chk_tires', title: 'ضبط ضغط الإطارات الأربعة والإطار الاحتياطي (33-35 PSI)', period: 'كل أسبوعين' },
+      { id: 'chk_wiper', title: 'تزويد سائل مساحات الزجاج الأمامي والخلفي', period: 'أسبوعياً' },
+      { id: 'chk_brake', title: 'التأكد من مستوى سائل الفرامل وعدم وجود تسريب', period: 'شهرياً' },
+      { id: 'chk_lights', title: 'اختبار جميع الإضاءات الأمامية والخلفية وإشارات الانتظار', period: 'قبل السفر' },
+      { id: 'chk_battery', title: 'فحص أقطاب البطارية والتأكد من نظافتها وثباتها', period: 'شهرياً' }
     ];
-
-    // Local Storage Initial State (Zeroed out as requested)
-    const STORAGE_KEY = "soueast_s05_car_data_v2";
 
     let appState = {
       currentKm: 0,
       initialDate: new Date().toISOString().split('T')[0],
+      lastOdoUpdateDate: null,
+      agencyServices: [],
       fuelLogs: [],
       notes: [],
-      agencyServices: [],
       checklist: {}
     };
 
-    // AI Variables
     let dashboardScanBase64 = null;
     let detectedMileageFromAI = null;
     let fuelScanBase64 = null;
     let extractedFuelData = null;
 
-    /* ========================================================
-       INIT & LOCAL PERSISTENCE
-       ======================================================== */
+    function getCurrentDateTimeFormatted() {
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      const timeStr = now.toTimeString().slice(0, 5);
+      return { dateStr, timeStr, full: `${dateStr} | ${timeStr}` };
+    }
+
     function loadLocalState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
-          appState = Object.assign({}, appState, JSON.parse(raw));
+          const parsed = JSON.parse(raw);
+          appState = { ...appState, ...parsed };
         }
       } catch (e) {
         console.error("Failed to load local state", e);
+      }
+    }
+
+    /* ========================================================
+       AI ADVICE & INSIGHTS (STRUCTURED & OBD2 AUDIT)
+       ======================================================== */
+    async function requestAiMaintenanceAdvice() {
+      const box = document.getElementById('dashAiInsightText');
+      box.innerHTML = `
+        <div class="py-6 text-center space-y-1.5 bg-slate-50 dark:bg-slate-900/60 rounded-lg border border-slate-200 dark:border-slate-800">
+          <i class="fa-solid fa-circle-notch fa-spin text-orange-500 text-base"></i>
+          <p class="text-[11px] font-bold text-slate-700 dark:text-slate-200">جارٍ تحليل بيانات Soueast S05 وتوليد التقرير الفني...</p>
+          <p class="text-[9px] text-slate-400">يتم فحص العداد، السجلات، وبروتوكول المراقبة والتدقيق (OBD2)</p>
+        </div>
+      `;
+
+      const renderStructuredCards = (data) => {
+        const auditItemsHtml = (data.auditSteps || []).map(step => `<li>${step}</li>`).join('');
+        box.innerHTML = `
+          <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-gauge-high text-orange-500 text-[10px]"></i> تقييم الحالة الفنية والعداد
+              </span>
+              <span class="text-[9px] font-mono bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 px-1.5 rounded">${appState.currentKm.toLocaleString()} كم</span>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-[10.5px]">${data.statusSummary}</p>
+          </div>
+
+          <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800">
+            <div class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5 mb-0.5">
+              <i class="fa-solid fa-gears text-sky-500 text-[10px]"></i> توصيات المحرك والفتيس (بنزين 92)
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-[10.5px]">${data.mechanicalAdvice}</p>
+          </div>
+
+          <div class="p-2 rounded-lg bg-orange-50/70 dark:bg-orange-500/10 border border-orange-200/80 dark:border-orange-500/30">
+            <div class="font-bold text-orange-700 dark:text-orange-400 flex items-center gap-1.5 mb-1">
+              <i class="fa-solid fa-laptop-medical text-[10px]"></i> بروتوكول أجهزة الفحص وبند المراقبة والتدقيق
+            </div>
+            <ul class="space-y-1 text-[10px] text-slate-700 dark:text-slate-300 list-disc list-inside leading-relaxed">
+              ${auditItemsHtml}
+            </ul>
+          </div>
+        `;
+      };
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const prompt = `
+أنت كبير مهندسي التشخيص والصيانة لسيارات ساويست (Soueast S05).
+بيانات السيارة الحالية:
+- العداد الحالي: ${appState.currentKm} كم.
+- عدد صيانات التوكيل المسجلة: ${appState.agencyServices ? appState.agencyServices.length : 0}.
+- عدد سجلات التفويل: ${appState.fuelLogs ? appState.fuelLogs.length : 0}.
+
+أعد الإجابة بصيغة JSON فقط وبدون أي نص إضافي بالهيكل التالي:
+{
+  "statusSummary": "ملخص فني دقيق لحالة السيارة بناءً على العداد والصيانة القادمة في سطرين.",
+  "mechanicalAdvice": "توصية مركزة حول المحرك والالتزام ببنزين 92 وتغيير مصفاة الفتيس لسيارات 1600 في سطرين.",
+  "auditSteps": [
+    "نقطة 1 حول التعامل الاحترافي مع جهاز الفحص (OBD2 Scanner) وقراءة الأكواد قبل مسحها.",
+    "نقطة 2 مفصلة حول بند المراقبة والتدقيق الحي (Live Data Monitoring) للقيم الحساسة مثل ضغط التيربو، حرارة المحرك، ونسب الوقود (Fuel Trim).",
+    "نقطة 3 حول تدقيق عمل الحساسات وإجراء المعايرة (Adaptation/Reset) فقط عند الحاجة الفعلية."
+  ]
+}
+`;
+
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: "application/json" }
+          })
+        });
+
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsed = JSON.parse(cleanJson);
+
+        renderStructuredCards(parsed);
+        showToast("تم تحديث التقرير والتحليل الذكي بنجاح");
+      } catch (e) {
+        renderStructuredCards({
+          statusSummary: `السيارة عند قراءة ${appState.currentKm.toLocaleString()} كم؛ يُنصح بمطابقة بنود الصيانة الدورية المجدولة قبل حلول موعدها.`,
+          mechanicalAdvice: "الالتزام ببنزين 92 الموصى به في دليل المالك، وتغيير مصفاة الفتيس الأوتوماتيك عند تغيير زيت الفتيس لطرازات 1600.",
+          auditSteps: [
+            "قراءة وتوثيق أكواد الأعطال (DTCs) عبر منفذ OBD2 قبل تنفيذ أي مسح للذاكرة.",
+            "بند المراقبة والتدقيق الحي (Live Data): فحص قراءات حرارة سائل التبريد، ضغط التيربو، واستجابة حساسات الأكسجين ونسب تصحيح الوقود (STFT/LTFT).",
+            "تجنب إجراءات إعادة الضبط أو التكويد العشوائي لوحدة التحكم (ECU) إلا بعد التحقق الميكانيكي الكامل."
+          ]
+        });
       }
     }
 
@@ -982,26 +1167,70 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadLocalState();
-      
-      // Set defaults for form dates
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (document.getElementById('fuelDate')) document.getElementById('fuelDate').value = todayStr;
-      if (document.getElementById('agencyDateInput')) document.getElementById('agencyDateInput').value = todayStr;
-      if (document.getElementById('noteDate')) document.getElementById('noteDate').value = todayStr;
+      try {
+        loadLocalState();
+        
+        // Set defaults for form dates
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (document.getElementById('fuelDate')) document.getElementById('fuelDate').value = todayStr;
+        if (document.getElementById('agencyDateInput')) document.getElementById('agencyDateInput').value = todayStr;
+        if (document.getElementById('noteDate')) document.getElementById('noteDate').value = todayStr;
 
-      renderAll();
+        renderAll();
+        runSelfDiagnosticAudit();
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
     });
 
+    /* ========================================================
+       SELF-DIAGNOSTIC & ANTI-REGRESSION AUDIT ENGINE
+       ======================================================== */
+    function runSelfDiagnosticAudit() {
+      const requiredFunctions = [
+        'switchTab', 'toggleSidebar', 'toggleTheme',
+        'openOdometerModal', 'closeOdometerModal', 'saveOdometerFromModal',
+        'openAgencyServiceModal', 'closeAgencyServiceModal', 'handleAgencyServiceSubmit',
+        'handleFuelSubmit', 'handleDashboardImageSelected', 'handleFuelImageSelected',
+        'requestAiMaintenanceAdvice', 'openNoteModal', 'handleNoteSubmit',
+        'exportDataBackup', 'importDataBackup', 'confirmResetAllData',
+        'calculateDualReminder', 'renderOfficialScheduleTable'
+      ];
+
+      let passed = 0;
+      const missing = [];
+
+      requiredFunctions.forEach(fnName => {
+        if (typeof window[fnName] === 'function') {
+          passed++;
+        } else {
+          missing.push(fnName);
+        }
+      });
+
+      const badge = document.getElementById('systemIntegrityBadge');
+      const countEl = document.getElementById('integrityFunctionCount');
+
+      if (missing.length === 0) {
+        if (countEl) countEl.textContent = `${passed}/${requiredFunctions.length} OK`;
+      } else {
+        console.warn("Self-Audit Warning - Missing functions:", missing);
+        if (badge) {
+          badge.className = "px-2 py-1 rounded bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 flex items-center justify-between text-[9px] font-mono text-rose-700 dark:text-rose-400";
+          badge.innerHTML = `<span><i class="fa-solid fa-triangle-exclamation"></i> تنبيه فحص</span><span>${passed}/${requiredFunctions.length}</span>`;
+        }
+      }
+    }
+
     function renderAll() {
-      updateOdometerDisplays();
-      renderDualMaintenanceAlert();
-      renderDashboard();
-      renderOfficialScheduleTable();
-      renderAgencyServices();
-      renderFuelLogs();
-      renderNotes();
-      renderChecklist();
+      try { updateOdometerDisplays(); } catch (e) { console.error(e); }
+      try { renderDualMaintenanceAlert(); } catch (e) { console.error(e); }
+      try { renderDashboard(); } catch (e) { console.error(e); }
+      try { renderOfficialScheduleTable(); } catch (e) { console.error(e); }
+      try { renderAgencyServices(); } catch (e) { console.error(e); }
+      try { renderFuelLogs(); } catch (e) { console.error(e); }
+      try { renderNotes(); } catch (e) { console.error(e); }
+      try { renderChecklist(); } catch (e) { console.error(e); }
     }
 
     /* ========================================================
@@ -1261,58 +1490,140 @@
 
     function renderFuelLogs() {
       const container = document.getElementById('fuelHistoryList');
+      const monthlyContainer = document.getElementById('fuelMonthlyAnalytics');
       if (!container) return;
 
+      const totalCountEl = document.getElementById('fuelTotalCount');
       const totalLitersEl = document.getElementById('fuelTotalLiters');
       const totalCostEl = document.getElementById('fuelTotalCost');
       const avgEconomyEl = document.getElementById('fuelAvgEconomy');
+      const avgCostPerKmEl = document.getElementById('fuelAvgCostPerKm');
 
       if (!appState.fuelLogs || appState.fuelLogs.length === 0) {
         container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">لا يوجد سجلات تعبئة مسجلة حتى الآن.</div>';
+        if (monthlyContainer) monthlyContainer.innerHTML = '<div class="text-center py-4 text-slate-400 text-[11px]">ستظهر الإحصائيات الشهرية تلقائياً عند إضافة أول تفويلة.</div>';
+        if (totalCountEl) totalCountEl.textContent = '0';
         if (totalLitersEl) totalLitersEl.textContent = '0';
         if (totalCostEl) totalCostEl.textContent = '0 ج.م';
         if (avgEconomyEl) avgEconomyEl.textContent = '--';
+        if (avgCostPerKmEl) avgCostPerKmEl.textContent = 'تكلفة الكيلومتر: --';
         return;
       }
 
       let totalLiters = 0;
       let totalCost = 0;
+      const monthlyMap = {};
+
       appState.fuelLogs.forEach(f => {
-        totalLiters += Number(f.liters || 0);
-        totalCost += Number(f.cost || 0);
+        const liters = Number(f.liters || 0);
+        const cost = Number(f.cost || 0);
+        totalLiters += liters;
+        totalCost += cost;
+
+        // تجميع شهري (YYYY-MM)
+        const monthKey = (f.date && f.date.length >= 7) ? f.date.substring(0, 7) : 'غير محدد';
+        if (!monthlyMap[monthKey]) {
+          monthlyMap[monthKey] = { count: 0, liters: 0, cost: 0 };
+        }
+        monthlyMap[monthKey].count += 1;
+        monthlyMap[monthKey].liters += liters;
+        monthlyMap[monthKey].cost += cost;
       });
 
-      if (totalLitersEl) totalLitersEl.textContent = totalLiters.toFixed(1);
+      if (totalCountEl) totalCountEl.textContent = appState.fuelLogs.length;
+      if (totalLitersEl) totalLitersEl.textContent = totalLiters.toFixed(1) + ' لتر';
       if (totalCostEl) totalCostEl.textContent = totalCost.toLocaleString() + ' ج.م';
 
-      // Calculate efficiency
-      if (appState.fuelLogs.length >= 2) {
-        const sorted = [...appState.fuelLogs].sort((a,b) => a.mileage - b.mileage);
-        const dist = sorted[sorted.length - 1].mileage - sorted[0].mileage;
-        const usedLiters = sorted.slice(1).reduce((acc, cur) => acc + cur.liters, 0);
+      // حساب نسبة الاستهلاك وتكلفة الكيلومتر الواحد
+      const sortedByKm = [...appState.fuelLogs].sort((a, b) => a.mileage - b.mileage);
+      let overallRateText = '--';
+      if (sortedByKm.length >= 2) {
+        const dist = sortedByKm[sortedByKm.length - 1].mileage - sortedByKm[0].mileage;
+        const usedLiters = sortedByKm.slice(1).reduce((acc, cur) => acc + Number(cur.liters || 0), 0);
+        const usedCost = sortedByKm.slice(1).reduce((acc, cur) => acc + Number(cur.cost || 0), 0);
         if (dist > 0 && usedLiters > 0) {
-          const rate = (dist / usedLiters).toFixed(1);
-          if (avgEconomyEl) avgEconomyEl.textContent = `${rate} كم/لتر`;
+          const kmPerLiter = (dist / usedLiters).toFixed(1);
+          const lPer100Km = ((usedLiters / dist) * 100).toFixed(1);
+          overallRateText = `${kmPerLiter} كم/لتر`;
+          if (avgEconomyEl) avgEconomyEl.innerHTML = `${kmPerLiter} <span class="text-[9px] font-normal">كم/لتر</span> <span class="block text-[9px] text-slate-400 font-normal">(${lPer100Km} لتر/100كم)</span>`;
+          if (avgCostPerKmEl && usedCost > 0) {
+            avgCostPerKmEl.textContent = `تكلفة الكيلومتر: ${(usedCost / dist).toFixed(2)} ج.م/كم`;
+          }
+        } else {
+          if (avgEconomyEl) avgEconomyEl.textContent = overallRateText;
+        }
+      } else {
+        if (avgEconomyEl) avgEconomyEl.textContent = overallRateText;
+      }
+
+      // عرض التحليل الشهري
+      if (monthlyContainer) {
+        const monthsSorted = Object.keys(monthlyMap).sort((a, b) => b.localeCompare(a));
+        const maxMonthlyCost = Math.max(...monthsSorted.map(m => monthlyMap[m].cost), 1);
+
+        let mHtml = '';
+        monthsSorted.forEach(mKey => {
+          const mData = monthlyMap[mKey];
+          const barPct = Math.min(100, Math.round((mData.cost / maxMonthlyCost) * 100));
+          mHtml += `
+            <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-[11px]">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-slate-800 dark:text-slate-200">${mKey}</span>
+                  <span class="text-[9px] bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-400 px-1.5 py-0.2 rounded font-bold">${mData.count} تفويلة</span>
+                </div>
+                <div class="flex items-center gap-2.5 font-mono text-[10px]">
+                  <span class="text-slate-600 dark:text-slate-300">${mData.liters.toFixed(1)} لتر</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">${mData.cost.toLocaleString()} ج.م</span>
+                </div>
+              </div>
+              <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-l from-orange-500 to-amber-500 rounded-full" style="width: ${barPct}%"></div>
+              </div>
+            </div>
+          `;
+        });
+        monthlyContainer.innerHTML = mHtml;
+      }
+
+      // ربط كل تفويلة بالتي تسبقها لحساب المسافة المقطوعة والاستهلاك الفردي لكل تعبئة
+      const prevMap = {};
+      for (let i = 1; i < sortedByKm.length; i++) {
+        const prev = sortedByKm[i - 1];
+        const curr = sortedByKm[i];
+        const tripKm = curr.mileage - prev.mileage;
+        if (tripKm > 0 && curr.liters > 0) {
+          prevMap[curr.id] = {
+            tripKm,
+            efficiency: (tripKm / curr.liters).toFixed(1)
+          };
         }
       }
 
+      // عرض السجل التفصيلي مرتباً بالأحدث
+      const displayLogs = [...appState.fuelLogs].sort((a, b) => new Date(b.date) - new Date(a.date) || b.mileage - a.mileage);
       let html = '';
-      appState.fuelLogs.forEach(item => {
+      displayLogs.forEach(item => {
+        const tripInfo = prevMap[item.id];
+        const literPrice = (item.cost && item.liters) ? (item.cost / item.liters).toFixed(2) : null;
+
         html += `
           <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-xs">
-            <div>
-              <div class="flex items-center gap-2">
+            <div class="space-y-0.5">
+              <div class="flex flex-wrap items-center gap-1.5">
                 <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">${item.mileage.toLocaleString()} كم</span>
                 <span class="text-[9px] bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400 px-1 rounded font-mono font-bold">بنزين ${item.octane}</span>
+                ${tripInfo ? `<span class="text-[9px] bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 px-1.5 rounded font-mono font-bold">+${tripInfo.tripKm} كم (${tripInfo.efficiency} كم/لتر)</span>` : ''}
                 <span class="text-[10px] text-slate-500 dark:text-slate-400">${item.station}</span>
               </div>
-              <div class="flex items-center gap-3 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                <span>التاريخ: ${item.date}</span>
+              <div class="flex flex-wrap items-center gap-2.5 text-[10px] text-slate-500 dark:text-slate-400">
+                <span>التاريخ: <strong class="font-mono text-slate-700 dark:text-slate-300">${item.date}</strong></span>
                 <span>• الكمية: <strong class="text-slate-800 dark:text-slate-200 font-mono">${item.liters} لتر</strong></span>
-                ${item.cost ? `<span>• التكلفة: <strong class="text-emerald-600 dark:text-emerald-400 font-mono">${item.cost} ج.م</strong></span>` : ''}
+                ${item.cost ? `<span>• القيمة: <strong class="text-emerald-600 dark:text-emerald-400 font-mono">${item.cost} ج.م</strong></span>` : ''}
+                ${literPrice ? `<span class="text-[9px] text-slate-400 font-mono">(${literPrice} ج.م/لتر)</span>` : ''}
               </div>
             </div>
-            <button onclick="deleteFuelLog('${item.id}')" class="text-rose-500 hover:text-rose-600 text-xs p-1">
+            <button onclick="deleteFuelLog('${item.id}')" class="text-rose-500 hover:text-rose-600 text-xs p-1.5 shrink-0" title="حذف السجل">
               <i class="fa-solid fa-trash text-[10px]"></i>
             </button>
           </div>
@@ -1598,7 +1909,7 @@
       const mileage = parseInt(document.getElementById('fuelKm').value, 10) || 0;
       const liters = parseFloat(document.getElementById('fuelLiters').value) || 0;
       const cost = parseFloat(document.getElementById('fuelCost').value) || 0;
-      const octane = document.getElementById('fuelOctane').value || "95";
+      const octane = document.getElementById('fuelOctane').value || "92";
       const station = document.getElementById('fuelStation').value || "محطة وقود";
 
       const fuelEntry = {
@@ -1622,6 +1933,7 @@
       renderAll();
       document.getElementById('fuelLogForm').reset();
       document.getElementById('fuelDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('fuelOctane').value = "92";
       showToast("تم حفظ سجل التفويل بنجاح");
     }
 
@@ -1631,6 +1943,13 @@
     function handleDashboardImageSelected(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
+
+      // تسجيل التاريخ والوقت فوراً عند اختيار أو التقاط الصورة
+      const nowInfo = getCurrentDateTimeFormatted();
+      appState.lastOdoUpdateDate = nowInfo.full;
+      saveLocalState();
+      const tsBadge = document.getElementById('aiScanTimestampBadge');
+      if (tsBadge) tsBadge.textContent = nowInfo.full;
 
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -1648,7 +1967,10 @@
     function clearDashboardImageScan() {
       const previewArea = document.getElementById('aiDashboardPreviewArea');
       if (previewArea) previewArea.classList.add('hidden');
-      document.getElementById('dashboardCameraInput').value = '';
+      const camIn = document.getElementById('dashboardCameraInput');
+      const galIn = document.getElementById('dashboardGalleryInput');
+      if (camIn) camIn.value = '';
+      if (galIn) galIn.value = '';
       dashboardScanBase64 = null;
       detectedMileageFromAI = null;
     }
@@ -1656,14 +1978,16 @@
     async function analyzeDashboardWithAI(base64Data) {
       const loader = document.getElementById('aiScanLoading');
       const outBox = document.getElementById('aiScanOutputBox');
+      const autoSavedBadge = document.getElementById('aiAutoSavedBadge');
       loader.classList.remove('hidden');
       outBox.classList.add('hidden');
+      if (autoSavedBadge) autoSavedBadge.classList.add('hidden');
 
       try {
         const apiKey = "";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-        const prompt = `حلل صورة طبلون السيارة وأخرج JSON فقط بالصيغة:
+        const prompt = `حلل صورة طبلون السيارة بدقة واستخرج قراءة المسافة المقطوعة الكلية (ODO / Odometer) وليس عداد الرحلات (Trip A/B)، وأخرج JSON فقط بالصيغة:
 {"mileage": 0, "warnings": ["اسم اللمبة أو الرمز التحذيري المضاء إن وجد"]}`;
 
         const res = await fetch(apiUrl, {
@@ -1686,6 +2010,17 @@
 
         detectedMileageFromAI = parseInt(parsed.mileage, 10) || 0;
         document.getElementById('aiDetectedMileage').textContent = detectedMileageFromAI.toLocaleString();
+
+        // حفظ تلقائي لقراءة ODO إذا كانت قراءة صحيحة
+        if (detectedMileageFromAI > 0) {
+          const nowInfo = getCurrentDateTimeFormatted();
+          appState.currentKm = detectedMileageFromAI;
+          appState.lastOdoUpdateDate = nowInfo.full;
+          saveLocalState();
+          renderAll();
+          if (autoSavedBadge) autoSavedBadge.classList.remove('hidden');
+          showToast(`تم حفظ عداد (${detectedMileageFromAI.toLocaleString()} كم) بتاريخ ${nowInfo.dateStr} تلقائياً!`);
+        }
 
         const warnEl = document.getElementById('aiDetectedWarnings');
         if (parsed.warnings && parsed.warnings.length > 0) {
@@ -1721,6 +2056,13 @@
       const file = event.target.files && event.target.files[0];
       if (!file) return;
 
+      // تسجيل التاريخ فوراً في نموذج التعبئة عند التقاط أو رفع الصورة
+      const nowInfo = getCurrentDateTimeFormatted();
+      const fuelDateInput = document.getElementById('fuelDate');
+      if (fuelDateInput) fuelDateInput.value = nowInfo.dateStr;
+      const confEl = document.getElementById('fuelScanConfidence');
+      if (confEl) confEl.textContent = `تاريخ الالتقاط: ${nowInfo.full}`;
+
       const reader = new FileReader();
       reader.onload = function(e) {
         const previewArea = document.getElementById('fuelScanPreviewArea');
@@ -1737,7 +2079,10 @@
     function clearFuelImageScan() {
       const previewArea = document.getElementById('fuelScanPreviewArea');
       if (previewArea) previewArea.classList.add('hidden');
-      document.getElementById('fuelScanInput').value = '';
+      const camIn = document.getElementById('fuelCameraInput');
+      const galIn = document.getElementById('fuelGalleryInput');
+      if (camIn) camIn.value = '';
+      if (galIn) galIn.value = '';
       fuelScanBase64 = null;
       extractedFuelData = null;
     }
@@ -1752,8 +2097,8 @@
         const apiKey = "";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-        const prompt = `استخرج بيانات التعبئة من الصورة وأرجع JSON فقط:
-{"mileage": 0, "liters": 0, "cost": 0, "octane": "95"}`;
+        const prompt = `استخرج بيانات التعبئة وقراءة المسافة المقطوعة الكلية (ODO) من الصورة وأرجع JSON فقط:
+{"mileage": 0, "liters": 0, "cost": 0, "octane": "92"}`;
 
         const res = await fetch(apiUrl, {
           method: 'POST',
@@ -1774,15 +2119,23 @@
         extractedFuelData = JSON.parse(cleanJson);
 
         document.getElementById('scanExtractedKm').textContent = (extractedFuelData.mileage || 0) + ' كم';
-        document.getElementById('scanExtractedLiters').textContent = (extractedFuelData.liters || 0) + ' لتر';
-        document.getElementById('scanExtractedCost').textContent = (extractedFuelData.cost || 0) + ' ج.م';
+        // حفظ وتفريغ تلقائي لبيانات الوقود وعداد ODO مع التاريخ
+        const nowInfo = getCurrentDateTimeFormatted();
+        extractedFuelData.date = nowInfo.dateStr;
+        applyExtractedFuelData();
+        if (extractedFuelData.mileage && extractedFuelData.mileage > 0) {
+          appState.currentKm = parseInt(extractedFuelData.mileage, 10);
+          appState.lastOdoUpdateDate = nowInfo.full;
+          saveLocalState();
+          renderAll();
+        }
 
         loader.classList.add('hidden');
         resBox.classList.remove('hidden');
       } catch (err) {
         loader.classList.add('hidden');
         resBox.classList.remove('hidden');
-        extractedFuelData = { mileage: appState.currentKm, liters: 40, cost: 500, octane: "95" };
+        extractedFuelData = { mileage: appState.currentKm, liters: 40, cost: 500, octane: "92" };
         document.getElementById('scanExtractedKm').textContent = extractedFuelData.mileage + ' كم';
         document.getElementById('scanExtractedLiters').textContent = extractedFuelData.liters + ' لتر';
         document.getElementById('scanExtractedCost').textContent = extractedFuelData.cost + ' ج.م';
@@ -1791,12 +2144,14 @@
 
     function applyExtractedFuelData() {
       if (!extractedFuelData) return;
+      const todayStr = new Date().toISOString().split('T')[0];
+      document.getElementById('fuelDate').value = extractedFuelData.date || todayStr;
       if (extractedFuelData.mileage) document.getElementById('fuelKm').value = extractedFuelData.mileage;
       if (extractedFuelData.liters) document.getElementById('fuelLiters').value = extractedFuelData.liters;
       if (extractedFuelData.cost) document.getElementById('fuelCost').value = extractedFuelData.cost;
       if (extractedFuelData.octane) document.getElementById('fuelOctane').value = extractedFuelData.octane;
 
-      showToast("تم تفريغ البيانات في نموذج التعبئة أدناه");
+      showToast(`تم تفريغ البيانات والتاريخ (${document.getElementById('fuelDate').value}) في النموذج`);
     }
 
     /* ========================================================
@@ -1817,47 +2172,6 @@
         toast.classList.remove('opacity-100');
         toast.classList.add('opacity-0', 'pointer-events-none');
       }, 3000);
-    }
-
-    /* ========================================================
-       AI ADVICE & INSIGHTS
-       ======================================================== */
-    async function requestAiMaintenanceAdvice() {
-      const box = document.getElementById('dashAiInsightText');
-      box.innerHTML = `<span class="inline-flex items-center gap-1.5 text-orange-400 text-xs"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ توليد التقرير المخصص لـ Soueast S05...</span>`;
-
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const prompt = `
-أنت كبير مهندسي الصيانة لسيارات ساويست (Soueast S05).
-بيانات السيارة الحالية:
-- العداد الحالي: ${appState.currentKm} كم.
-- عدد صيانات التوكيل المسجلة: ${appState.agencyServices ? appState.agencyServices.length : 0}.
-- عدد سجلات التفويل: ${appState.fuelLogs ? appState.fuelLogs.length : 0}.
-
-قدم 3 توصيات فنية حاسمة وموجزة باللغة العربية بخصوص:
-1. صيانة المحرك والتربو واختيار البنزين المناسب (95 أو 92).
-2. الفتيس وزيت ناقل الحركة ومصفاة الفتيس لمحرك 1600.
-3. التجهيز للصيانة الدورية القادمة.
-اكتبها في شكل نقاط واضحة ومباشرة.
-`;
-
-        const res = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          box.innerHTML = text.replace(/\n/g, '<br>');
-        }
-      } catch (e) {
-        box.innerHTML = `• التزم بالبنزين عالي الأوكتان (95) للحفاظ على كفاءة التربو.<br>• تابع مستوى المياه والزيت التخليقي أسبوعياً.`;
-      }
     }
 
     /* ========================================================
@@ -1915,3 +2229,4 @@
   </script>
 </body>
 </html>
+```
